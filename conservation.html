@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保护生物学双语词汇系统 | Conservation Biology Bilingual System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a7c5c;
+            --secondary: #5d9b7c;
+            --light: #f5f9f7;
+            --dark: #1e3c2d;
+            --accent1: #e9b44c;
+            --accent2: #d9534f;
+            --gradient1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient2: linear-gradient(135deg, var(--dark) 0%, #0f271c 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #edf5f1;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: white;
+            border-radius: 50px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        header {
+            background: var(--gradient2);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conservation-icon {
+            font-size: 3.5rem;
+            color: var(--accent1);
+            margin-bottom: 1rem;
+            animation: grow 3s ease-in-out infinite;
+        }
+        
+        @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .header-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .bilingual {
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .bilingual.en {
+            font-style: italic;
+            font-size: 0.9em;
+            opacity: 0.9;
+            border-left: 3px solid var(--accent1);
+            padding-left: 10px;
+            margin-top: 5px;
+        }
+        
+        .conservation-animation {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            opacity: 0.3;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+        
+        .conservation-leaf {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent1);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: leafFall 15s infinite linear;
+            opacity: 0.7;
+        }
+        
+        @keyframes leafFall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tab {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background-color: var(--accent2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .section-title-en {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.8;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: var(--gradient1);
+            color: white;
+            padding: 1.2rem;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .character-breakdown {
+            background-color: #f0f7f3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .char-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .char {
+            font-weight: bold;
+            color: var(--dark);
+            min-width: 24px;
+            text-align: center;
+            margin-right: 8px;
+            background-color: #e6f2ee;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        
+        .meaning {
+            color: #555;
+            flex: 1;
+        }
+        
+        .meaning-en {
+            font-size: 0.85em;
+            color: #777;
+            margin-left: 5px;
+            font-style: italic;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .visual-aid {
+            height: 120px;
+            background-color: #e9f5f1;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .conservation-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .icon-placeholder {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+        
+        .term-details {
+            margin-top: 1rem;
+        }
+        
+        .term-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .term-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--primary);
+        }
+        
+        .term-value {
+            flex: 1;
+        }
+        
+        .term-en {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 3px;
+            padding-left: 10px;
+            border-left: 2px solid #e0e0e0;
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border 0.3s;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .interactive-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .quiz-question-en {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .quiz-option {
+            padding: 1rem;
+            background-color: #f0f7f3;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e6f2ee;
+        }
+        
+        .quiz-option.correct {
+            background-color: #d4edda;
+            border-color: #a3de83;
+            color: #155724;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .result.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .threat-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .threat-level {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-top: 4px solid;
+        }
+        
+        .threat-level:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .threat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            background-color: rgba(233, 180, 76, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .concept-chain {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .chain-item {
+            background: var(--gradient1);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chain-item-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .chain-arrow {
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .learning-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent2);
+        }
+        
+        .character-animation {
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .process-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .process-step {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            width: 200px;
+            margin: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--primary);
+        }
+        
+        .process-step-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .process-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0 1rem;
+        }
+        
+        .hierarchical-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .hierarchical-level {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .level-label {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-right: 1rem;
+            min-width: 120px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .level-label-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+        }
+        
+        .level-content {
+            background-color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+        
+        .level-content-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .bilingual-text {
+            margin-bottom: 1rem;
+        }
+        
+        .text-en {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95em;
+            margin-top: 5px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent1);
+        }
+        
+        .threat-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .threat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid;
+        }
+        
+        .threat-card.habitat-loss {
+            border-left-color: #d9534f;
+        }
+        
+        .threat-card.climate-change {
+            border-left-color: #f0ad4e;
+        }
+        
+        .threat-card.pollution {
+            border-left-color: #5bc0de;
+        }
+        
+        .threat-card.overexploitation {
+            border-left-color: #337ab7;
+        }
+        
+        .threat-card.invasive {
+            border-left-color: #8e44ad;
+        }
+        
+        .threat-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .threat-icon-small {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+            }
+            
+            .process-diagram {
+                flex-direction: column;
+            }
+            
+            .process-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+            
+            .language-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+            
+            .threat-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .english-mode .zh {
+            opacity: 0.7;
+        }
+        
+        .english-mode .en {
+            font-weight: 600;
+            opacity: 1;
+        }
+        
+        .conservation-levels {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .conservation-level {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--secondary);
+        }
+        
+        .conservation-level.highlighted {
+            border-color: var(--accent1);
+            background-color: #f9f5f0;
+        }
+        
+        .conservation-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .status-color {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-critical { background-color: #d9534f; }
+        .status-endangered { background-color: #f0ad4e; }
+        .status-vulnerable { background-color: #5bc0de; }
+        .status-near-threatened { background-color: #5cb85c; }
+        .status-least-concern { background-color: #337ab7; }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <button class="lang-btn active" data-lang="both">中英双语</button>
+        <button class="lang-btn" data-lang="zh">仅中文</button>
+        <button class="lang-btn" data-lang="en">English Only</button>
+    </div>
+    
+    <header>
+        <div class="header-content">
+            <div class="conservation-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1>保护生物学双语词汇系统</h1>
+            <p class="subtitle">Conservation Biology Bilingual Vocabulary System</p>
+            <p class="header-description">
+                学习保护生物学、理解生物多样性威胁、掌握保护策略
+                <span class="bilingual en">Learn conservation biology, understand biodiversity threats, master protection strategies</span>
+            </p>
+            
+            <div class="learning-level">
+                <button class="level-btn active" data-level="all">全部级别 / All Levels</button>
+                <button class="level-btn" data-level="basic">初级学习 / Beginner</button>
+                <button class="level-btn" data-level="intermediate">中级学习 / Intermediate</button>
+                <button class="level-btn" data-level="advanced">高级学习 / Advanced</button>
+            </div>
+        </div>
+        
+        <div class="conservation-animation" id="conservationAnimation">
+            <!-- 叶片将通过JS动态生成 -->
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" data-tab="overview">概览 / Overview</button>
+            <button class="tab" data-tab="core">核心概念 / Core Concepts</button>
+            <button class="tab" data-tab="threats">主要威胁 / Major Threats</button>
+            <button class="tab" data-tab="strategies">保护策略 / Conservation Strategies</button>
+            <button class="tab" data-tab="status">保护状态 / Conservation Status</button>
+            <button class="tab" data-tab="organizations">组织与政策 / Organizations & Policies</button>
+            <button class="tab" data-tab="interactive">互动学习 / Interactive Learning</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索保护生物学相关词汇 (中/英文均可)... / Search conservation biology terms (Chinese/English)...">
+        </div>
+        
+        <!-- 概览标签页 -->
+        <div id="overview" class="tab-content active">
+            <h2 class="section-title">
+                <i class="fas fa-shield-alt"></i>保护生物学学习概览
+                <span class="section-title-en">Conservation Biology Learning Overview</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>什么是保护生物学？</h3>
+                <div class="bilingual-text">
+                    <p class="zh">保护生物学是一门综合性学科，旨在研究生物多样性保护、生态系统的恢复与管理，以及人类活动对自然环境的影响。它的核心目标是防止物种灭绝、保护生物多样性和维持生态系统的健康与功能。</p>
+                    <p class="en">Conservation biology is an interdisciplinary field that studies the protection of biodiversity, restoration and management of ecosystems, and the impact of human activities on the natural environment. Its core objectives are to prevent species extinction, protect biodiversity, and maintain ecosystem health and function.</p>
+                </div>
+                
+                <div class="concept-chain">
+                    <div class="chain-item">
+                        生物多样性危机
+                        <span class="chain-item-en">Biodiversity Crisis</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        保护生物学研究
+                        <span class="chain-item-en">Conservation Biology Research</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        保护策略制定
+                        <span class="chain-item-en">Conservation Strategy Development</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        保护行动实施
+                        <span class="chain-item-en">Conservation Action Implementation</span>
+                    </div>
+                </div>
+                
+                <div class="hierarchical-chart">
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            保护目标
+                            <span class="level-label-en">Conservation Goals</span>
+                        </div>
+                        <div class="level-content">
+                            防止物种灭绝、保护生物多样性、维持生态系统功能
+                            <div class="level-content-en">Prevent species extinction, protect biodiversity, maintain ecosystem function</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            保护对象
+                            <span class="level-label-en">Conservation Targets</span>
+                        </div>
+                        <div class="level-content">
+                            濒危物种、关键栖息地、生态系统服务、遗传资源
+                            <div class="level-content-en">Endangered species, critical habitats, ecosystem services, genetic resources</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            主要威胁
+                            <span class="level-label-en">Major Threats</span>
+                        </div>
+                        <div class="level-content">
+                            栖息地丧失、气候变化、污染、过度开发、入侵物种
+                            <div class="level-content-en">Habitat loss, climate change, pollution, overexploitation, invasive species</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            保护方法
+                            <span class="level-label-en">Conservation Methods</span>
+                        </div>
+                        <div class="level-content">
+                            就地保护、迁地保护、栖息地恢复、可持续利用
+                            <div class="level-content-en">In-situ conservation, ex-situ conservation, habitat restoration, sustainable use</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">汉字中的科学：以"保护"为例</h3>
+                <div class="character-breakdown">
+                    <div class="char-item">
+                        <span class="char">保</span>
+                        <span class="meaning">
+                            从"人"从"呆" → 养育、守护
+                            <span class="meaning-en">From "person" + "呆" (simplified) → nurture, guard</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">护</span>
+                        <span class="meaning">
+                            从"言"从"隻" → 防卫、照看
+                            <span class="meaning-en">From "speech" + "隻" (traditional) → defend, look after</span>
+                        </span>
+                    </div>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">
+                        "保护"二字合义：守护、防卫、维持事物的安全与完整
+                        <span class="meaning-en">"Conservation": Guarding, defending, maintaining the safety and integrity of things</span>
+                    </p>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>保护生物学的重要性
+                <span class="section-title-en">Importance of Conservation Biology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生态价值</h3>
+                        <p class="card-subtitle">Ecological Value</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">保护生物学维护生态系统的稳定和功能，包括养分循环、授粉、水质净化等关键生态过程。</p>
+                            <p class="en">Conservation biology maintains ecosystem stability and function, including key ecological processes such as nutrient cycling, pollination, and water purification.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-leaf icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    湿地保护有助于净化水源和防洪
+                                    <span class="term-en">Wetland conservation helps purify water sources and prevent floods</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">经济价值</h3>
+                        <p class="card-subtitle">Economic Value</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">保护生物学支持可持续的资源利用，保障粮食安全、药物资源和生态旅游等经济活动。</p>
+                            <p class="en">Conservation biology supports sustainable resource use, ensuring food security, medicinal resources, and ecotourism activities.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-dollar-sign icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    海洋保护区支持可持续渔业
+                                    <span class="term-en">Marine protected areas support sustainable fisheries</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">伦理价值</h3>
+                        <p class="card-subtitle">Ethical Value</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">保护生物学体现人类对自然的责任，承认其他物种的生存权利和内在价值。</p>
+                            <p class="en">Conservation biology reflects human responsibility toward nature, acknowledging the rights and intrinsic value of other species.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-hands-helping icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    防止物种灭绝的道德责任
+                                    <span class="term-en">Moral responsibility to prevent species extinction</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心概念标签页 -->
+        <div id="core" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>核心概念与术语
+                <span class="section-title-en">Core Concepts & Terminology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 保护生物学 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">保护生物学</h3>
+                        <p class="card-subtitle">Conservation Biology</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">保</span>
+                                <span class="meaning">
+                                    守护、防卫
+                                    <span class="meaning-en">Guard, defend</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">护</span>
+                                <span class="meaning">
+                                    照看、保护
+                                    <span class="meaning-en">Look after, protect</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    生命、生物
+                                    <span class="meaning-en">Life, organism</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    事物、物种
+                                    <span class="meaning-en">Thing, species</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">学</span>
+                                <span class="meaning">
+                                    学问、学科
+                                    <span class="meaning-en">Study, discipline</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-shield-alt icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    bǎo hù shēng wù xué
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    研究生物多样性保护、生态系统恢复与管理，以及人类活动对自然环境影响的综合性学科
+                                    <span class="term-en">An interdisciplinary field that studies biodiversity conservation, ecosystem restoration and management, and the impact of human activities on the natural environment</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    The scientific study of nature and of Earth's biodiversity with the aim of protecting species, their habitats, and ecosystems from excessive rates of extinction
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">主要目标 / Main Goals:</span>
+                                <div class="term-value">
+                                    防止物种灭绝、保护生物多样性、维持生态系统功能
+                                    <span class="term-en">Prevent species extinction, protect biodiversity, maintain ecosystem function</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生物多样性保护 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生物多样性保护</h3>
+                        <p class="card-subtitle">Biodiversity Conservation</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">保</span>
+                                <span class="meaning">
+                                    守护
+                                    <span class="meaning-en">Guard</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">护</span>
+                                <span class="meaning">
+                                    保护
+                                    <span class="meaning-en">Protect</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-dna icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng wù duō yàng xìng bǎo hù
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    保护地球上所有生命形式（基因、物种和生态系统）的丰富性和多样性的实践和科学
+                                    <span class="term-en">The practice and science of protecting the variety and variability of life on Earth at all levels (genes, species, and ecosystems)</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    The practice of protecting and preserving the variety of life on Earth at all its levels, from genes to ecosystems
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">三个层次 / Three Levels:</span>
+                                <div class="term-value">
+                                    基因多样性保护、物种多样性保护、生态系统多样性保护
+                                    <span class="term-en">Genetic diversity conservation, species diversity conservation, ecosystem diversity conservation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 可持续发展 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">可持续发展</h3>
+                        <p class="card-subtitle">Sustainable Development</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">可</span>
+                                <span class="meaning">
+                                    可以、能够
+                                    <span class="meaning-en">Can, able to</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">持</span>
+                                <span class="meaning">
+                                    保持、维持
+                                    <span class="meaning-en">Maintain, sustain</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">续</span>
+                                <span class="meaning">
+                                    继续、延续
+                                    <span class="meaning-en">Continue, extend</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">发</span>
+                                <span class="meaning">
+                                    发展、展开
+                                    <span class="meaning-en">Develop, unfold</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">展</span>
+                                <span class="meaning">
+                                    展开、展示
+                                    <span class="meaning-en">Unfold, display</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-recycle icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    kě chí xù fā zhǎn
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    既满足当代人的需求，又不损害后代人满足其需求能力的发展模式
+                                    <span class="term-en">Development that meets the needs of the present without compromising the ability of future generations to meet their own needs</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    Development that meets the needs of the present without compromising the ability of future generations to meet their own needs
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">三个支柱 / Three Pillars:</span>
+                                <div class="term-value">
+                                    环境可持续性、经济可行性、社会公平性
+                                    <span class="term-en">Environmental sustainability, economic viability, social equity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-sitemap"></i>保护生物学的主要方法
+                <span class="section-title-en">Main Methods in Conservation Biology</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <div class="process-diagram">
+                    <div class="process-step">
+                        <h4>就地保护</h4>
+                        <p class="process-step-en">In-situ Conservation</p>
+                        <div class="bilingual-text">
+                            <p class="zh">在自然栖息地内保护物种和生态系统</p>
+                            <p class="en">Protecting species and ecosystems within their natural habitats</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrows-alt-h"></i></div>
+                    <div class="process-step">
+                        <h4>迁地保护</h4>
+                        <p class="process-step-en">Ex-situ Conservation</p>
+                        <div class="bilingual-text">
+                            <p class="zh">在自然栖息地外保护物种和遗传资源</p>
+                            <p class="en">Protecting species and genetic resources outside their natural habitats</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrows-alt-h"></i></div>
+                    <div class="process-step">
+                        <h4>栖息地恢复</h4>
+                        <p class="process-step-en">Habitat Restoration</p>
+                        <div class="bilingual-text">
+                            <p class="zh">恢复退化的生态系统到健康状态</p>
+                            <p class="en">Restoring degraded ecosystems to a healthy state</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bilingual-text">
+                    <p class="zh">保护生物学采用多种方法相互补充，以应对不同的保护挑战。</p>
+                    <p class="en">Conservation biology employs multiple complementary methods to address different conservation challenges.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主要威胁标签页 -->
+        <div id="threats" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-exclamation-triangle"></i>生物多样性的主要威胁
+                <span class="section-title-en">Major Threats to Biodiversity</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>五大主要威胁</h3>
+                <div class="bilingual-text">
+                    <p class="zh">生物多样性面临多种威胁，这些威胁往往相互关联、相互加剧。以下是五个最主要的威胁：</p>
+                    <p class="en">Biodiversity faces multiple threats that are often interconnected and mutually reinforcing. The following are the five major threats:</p>
+                </div>
+                
+                <div class="threat-container">
+                    <div class="threat-card habitat-loss">
+                        <div class="threat-title">
+                            <div class="threat-icon-small">
+                                <i class="fas fa-tree"></i>
+                            </div>
+                            <h3>栖息地丧失</h3>
+                        </div>
+                        <p class="card-subtitle">Habitat Loss</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">栖</span>
+                                <span class="meaning">
+                                    鸟在树上休息
+                                    <span class="meaning-en">Birds resting in trees</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">息</span>
+                                <span class="meaning">
+                                    休息、停留
+                                    <span class="meaning-en">Rest, stay</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">地</span>
+                                <span class="meaning">
+                                    地方、土地
+                                    <span class="meaning-en">Place, land</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    自然栖息地被转化为农业、城市或其他人类用途
+                                    <span class="term-en">Conversion of natural habitats to agricultural, urban, or other human uses</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">原因:</span>
+                                <div class="term-value">
+                                    森林砍伐、农业扩张、城市发展
+                                    <span class="term-en">Deforestation, agricultural expansion, urban development</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">影响:</span>
+                                <div class="term-value">
+                                    物种灭绝、生态系统功能丧失
+                                    <span class="term-en">Species extinction, loss of ecosystem function</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-card climate-change">
+                        <div class="threat-title">
+                            <div class="threat-icon-small">
+                                <i class="fas fa-thermometer-half"></i>
+                            </div>
+                            <h3>气候变化</h3>
+                        </div>
+                        <p class="card-subtitle">Climate Change</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">气</span>
+                                <span class="meaning">
+                                    空气、气候
+                                    <span class="meaning-en">Air, climate</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">候</span>
+                                <span class="meaning">
+                                    时节、等待
+                                    <span class="meaning-en">Season, wait</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    全球气候系统的长期变化，主要由人类活动引起
+                                    <span class="term-en">Long-term changes in the global climate system, primarily caused by human activities</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">原因:</span>
+                                <div class="term-value">
+                                    温室气体排放、森林砍伐
+                                    <span class="term-en">Greenhouse gas emissions, deforestation</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">影响:</span>
+                                <div class="term-value">
+                                    物种分布变化、极端天气事件增加
+                                    <span class="term-en">Changes in species distribution, increased extreme weather events</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-card pollution">
+                        <div class="threat-title">
+                            <div class="threat-icon-small">
+                                <i class="fas fa-smog"></i>
+                            </div>
+                            <h3>污染</h3>
+                        </div>
+                        <p class="card-subtitle">Pollution</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">污</span>
+                                <span class="meaning">
+                                    脏水、不洁
+                                    <span class="meaning-en">Dirty water, unclean</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">染</span>
+                                <span class="meaning">
+                                    着色、沾染
+                                    <span class="meaning-en">Color, stain</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    有害物质进入环境，对生物和生态系统造成损害
+                                    <span class="term-en">Introduction of harmful substances into the environment, causing damage to organisms and ecosystems</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">类型:</span>
+                                <div class="term-value">
+                                    水污染、空气污染、土壤污染、塑料污染
+                                    <span class="term-en">Water pollution, air pollution, soil pollution, plastic pollution</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">影响:</span>
+                                <div class="term-value">
+                                    中毒、疾病、生态系统退化
+                                    <span class="term-en">Poisoning, disease, ecosystem degradation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-card overexploitation">
+                        <div class="threat-title">
+                            <div class="threat-icon-small">
+                                <i class="fas fa-fish"></i>
+                            </div>
+                            <h3>过度开发</h3>
+                        </div>
+                        <p class="card-subtitle">Overexploitation</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">过</span>
+                                <span class="meaning">
+                                    超过、过度
+                                    <span class="meaning-en">Exceed, excessive</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">度</span>
+                                <span class="meaning">
+                                    程度、限度
+                                    <span class="meaning-en">Degree, limit</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">开</span>
+                                <span class="meaning">
+                                    打开、开发
+                                    <span class="meaning-en">Open, develop</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">发</span>
+                                <span class="meaning">
+                                    发展、利用
+                                    <span class="meaning-en">Develop, utilize</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    以超过其自然再生能力的速度利用自然资源
+                                    <span class="term-en">Use of natural resources at a rate exceeding their natural regeneration capacity</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">形式:</span>
+                                <div class="term-value">
+                                    过度捕捞、过度狩猎、非法野生动物贸易
+                                    <span class="term-en">Overfishing, overhunting, illegal wildlife trade</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">影响:</span>
+                                <div class="term-value">
+                                    种群数量下降、物种灭绝
+                                    <span class="term-en">Population decline, species extinction</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-card invasive">
+                        <div class="threat-title">
+                            <div class="threat-icon-small">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            <h3>入侵物种</h3>
+                        </div>
+                        <p class="card-subtitle">Invasive Species</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">入</span>
+                                <span class="meaning">
+                                    进入
+                                    <span class="meaning-en">Enter</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">侵</span>
+                                <span class="meaning">
+                                    侵略、渐进
+                                    <span class="meaning-en">Invade, gradual</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    被引入新环境的物种，其繁殖和扩散威胁本地生物多样性
+                                    <span class="term-en">Species introduced to new environments where they reproduce and spread, threatening native biodiversity</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">途径:</span>
+                                <div class="term-value">
+                                    国际贸易、航运、宠物贸易
+                                    <span class="term-en">International trade, shipping, pet trade</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">影响:</span>
+                                <div class="term-value">
+                                    竞争资源、传播疾病、改变生态系统
+                                    <span class="term-en">Competing for resources, spreading diseases, altering ecosystems</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 保护策略标签页 -->
+        <div id="strategies" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-tasks"></i>保护策略与方法
+                <span class="section-title-en">Conservation Strategies & Methods</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 就地保护 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">就地保护</h3>
+                        <p class="card-subtitle">In-situ Conservation</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">就</span>
+                                <span class="meaning">
+                                    接近、在...地方
+                                    <span class="meaning-en">Close to, at the place</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">地</span>
+                                <span class="meaning">
+                                    地方、土地
+                                    <span class="meaning-en">Place, land</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-mountain icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    jiù dì bǎo hù
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    在物种的自然栖息地内对其进行保护，维护其自然生态系统
+                                    <span class="term-en">Conservation of species within their natural habitats, maintaining their natural ecosystems</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">方法 / Methods:</span>
+                                <div class="term-value">
+                                    建立自然保护区、国家公园、野生动物保护区
+                                    <span class="term-en">Establishing nature reserves, national parks, wildlife sanctuaries</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">优点 / Advantages:</span>
+                                <div class="term-value">
+                                    维持自然生态过程、保护完整生态系统
+                                    <span class="term-en">Maintains natural ecological processes, protects entire ecosystems</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 迁地保护 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">迁地保护</h3>
+                        <p class="card-subtitle">Ex-situ Conservation</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">迁</span>
+                                <span class="meaning">
+                                    迁移、移动
+                                    <span class="meaning-en">Move, migrate</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">地</span>
+                                <span class="meaning">
+                                    地方、土地
+                                    <span class="meaning-en">Place, land</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-seedling icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    qiān dì bǎo hù
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    将物种从其自然栖息地迁移到人工环境中进行保护
+                                    <span class="term-en">Conservation of species outside their natural habitats in artificial environments</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">方法 / Methods:</span>
+                                <div class="term-value">
+                                    动物园、植物园、种子库、基因库
+                                    <span class="term-en">Zoos, botanical gardens, seed banks, gene banks</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">优点 / Advantages:</span>
+                                <div class="term-value">
+                                    保护极度濒危物种、开展科学研究、公众教育
+                                    <span class="term-en">Protects critically endangered species, facilitates scientific research, public education</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 栖息地恢复 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">栖息地恢复</h3>
+                        <p class="card-subtitle">Habitat Restoration</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">恢</span>
+                                <span class="meaning">
+                                    恢复、广大
+                                    <span class="meaning-en">Restore, vast</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">复</span>
+                                <span class="meaning">
+                                    回复、重复
+                                    <span class="meaning-en">Return, repeat</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-tree icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    qī xī dì huī fù
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    通过人工干预帮助退化的生态系统恢复到更自然、健康的状态
+                                    <span class="term-en">Assisting the recovery of degraded ecosystems to a more natural, healthy state through human intervention</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">方法 / Methods:</span>
+                                <div class="term-value">
+                                    重新造林、湿地恢复、清除入侵物种
+                                    <span class="term-en">Reforestation, wetland restoration, removal of invasive species</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">目标 / Goals:</span>
+                                <div class="term-value">
+                                    重建生态系统功能、恢复物种栖息地、提高生物多样性
+                                    <span class="term-en">Rebuild ecosystem function, restore species habitats, increase biodiversity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生态廊道 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生态廊道</h3>
+                        <p class="card-subtitle">Ecological Corridor</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">廊</span>
+                                <span class="meaning">
+                                    走廊、通道
+                                    <span class="meaning-en">Corridor, passage</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">道</span>
+                                <span class="meaning">
+                                    道路、通道
+                                    <span class="meaning-en">Road, passage</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-road icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng tài láng dào
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    连接孤立栖息地的自然或人工通道，促进物种迁移和基因流动
+                                    <span class="term-en">Natural or artificial passages connecting isolated habitats, facilitating species migration and gene flow</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">功能 / Functions:</span>
+                                <div class="term-value">
+                                    促进物种迁移、减少栖息地碎片化影响、增加基因交流
+                                    <span class="term-en">Facilitates species migration, reduces effects of habitat fragmentation, increases genetic exchange</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">类型 / Types:</span>
+                                <div class="term-value">
+                                    河流廊道、森林走廊、野生动物通道
+                                    <span class="term-en">River corridors, forest corridors, wildlife crossings</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-chart-line"></i>保护策略实施层次
+                <span class="section-title-en">Hierarchy of Conservation Strategy Implementation</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <div class="conservation-levels">
+                    <div class="conservation-level">
+                        <h4>基因层面</h4>
+                        <p>Genetic Level</p>
+                        <div class="bilingual-text">
+                            <p class="zh">种子库、基因库、人工繁殖</p>
+                            <p class="en">Seed banks, gene banks, captive breeding</p>
+                        </div>
+                    </div>
+                    <div class="conservation-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="conservation-level">
+                        <h4>物种层面</h4>
+                        <p>Species Level</p>
+                        <div class="bilingual-text">
+                            <p class="zh">濒危物种保护、种群管理</p>
+                            <p class="en">Endangered species protection, population management</p>
+                        </div>
+                    </div>
+                    <div class="conservation-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="conservation-level">
+                        <h4>栖息地层面</h4>
+                        <p>Habitat Level</p>
+                        <div class="bilingual-text">
+                            <p class="zh">自然保护区、栖息地恢复</p>
+                            <p class="en">Nature reserves, habitat restoration</p>
+                        </div>
+                    </div>
+                    <div class="conservation-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="conservation-level highlighted">
+                        <h4>景观层面</h4>
+                        <p>Landscape Level</p>
+                        <div class="bilingual-text">
+                            <p class="zh">生态网络、区域保护规划</p>
+                            <p class="en">Ecological networks, regional conservation planning</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 保护状态标签页 -->
+        <div id="status" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-clipboard-list"></i>物种保护状态
+                <span class="section-title-en">Species Conservation Status</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>世界自然保护联盟红色名录等级</h3>
+                <div class="bilingual-text">
+                    <p class="zh">世界自然保护联盟红色名录是评估全球物种灭绝风险的最权威标准。它根据物种的种群数量、分布范围和下降速率等因素，将物种分为不同的保护等级。</p>
+                    <p class="en">The IUCN Red List is the most authoritative standard for assessing the extinction risk of global species. It categorizes species into different conservation levels based on factors such as population size, distribution range, and rate of decline.</p>
+                </div>
+                
+                <div class="threat-levels">
+                    <div class="threat-level" style="border-top-color: #d9534f;">
+                        <div class="threat-icon" style="color: #d9534f;">
+                            <i class="fas fa-skull-crossbones"></i>
+                        </div>
+                        <h4>灭绝</h4>
+                        <p>Extinct (EX)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">没有合理理由怀疑该物种的最后一个个体已经死亡</p>
+                            <p class="en">No reasonable doubt that the last individual has died</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    渡渡鸟、旅鸽
+                                    <span class="term-en">Dodo, Passenger pigeon</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-level" style="border-top-color: #d9534f;">
+                        <div class="threat-icon" style="color: #d9534f;">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h4>极危</h4>
+                        <p>Critically Endangered (CR)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">在野外面临极高的灭绝风险</p>
+                            <p class="en">Faces an extremely high risk of extinction in the wild</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    山地大猩猩、爪哇犀牛
+                                    <span class="term-en">Mountain gorilla, Javan rhinoceros</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-level" style="border-top-color: #f0ad4e;">
+                        <div class="threat-icon" style="color: #f0ad4e;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h4>濒危</h4>
+                        <p>Endangered (EN)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">在野外面临很高的灭绝风险</p>
+                            <p class="en">Faces a very high risk of extinction in the wild</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    亚洲象、大熊猫
+                                    <span class="term-en">Asian elephant, Giant panda</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-level" style="border-top-color: #5bc0de;">
+                        <div class="threat-icon" style="color: #5bc0de;">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <h4>易危</h4>
+                        <p>Vulnerable (VU)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">在野外面临较高的灭绝风险</p>
+                            <p class="en">Faces a high risk of extinction in the wild</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    非洲象、猎豹
+                                    <span class="term-en">African elephant, Cheetah</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-level" style="border-top-color: #5cb85c;">
+                        <div class="threat-icon" style="color: #5cb85c;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h4>近危</h4>
+                        <p>Near Threatened (NT)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">接近符合易危标准，或在不久的将来可能符合受威胁等级</p>
+                            <p class="en">Close to qualifying for vulnerable status, or likely to qualify for a threatened category in the near future</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    美洲野牛、北极狐
+                                    <span class="term-en">American bison, Arctic fox</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="threat-level" style="border-top-color: #337ab7;">
+                        <div class="threat-icon" style="color: #337ab7;">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h4>无危</h4>
+                        <p>Least Concern (LC)</p>
+                        <div class="bilingual-text">
+                            <p class="zh">未达到任何受威胁等级的标准</p>
+                            <p class="en">Does not meet any of the criteria for threatened categories</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例:</span>
+                                <div class="term-value">
+                                    人类、家犬
+                                    <span class="term-en">Human, Domestic dog</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-file-contract"></i>保护状态术语
+                <span class="section-title-en">Conservation Status Terminology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 濒危物种 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">濒危物种</h3>
+                        <p class="card-subtitle">Endangered Species</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">濒</span>
+                                <span class="meaning">
+                                    水边、接近
+                                    <span class="meaning-en">Waterside, close to</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">危</span>
+                                <span class="meaning">
+                                    危险、危害
+                                    <span class="meaning-en">Danger, harm</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-exclamation-triangle icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    bīn wēi wù zhǒng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    在野外面临很高灭绝风险的物种
+                                    <span class="term-en">Species facing a very high risk of extinction in the wild</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">IUCN等级:</span>
+                                <div class="term-value">
+                                    极危(CR)、濒危(EN)、易危(VU)
+                                    <span class="term-en">Critically Endangered (CR), Endangered (EN), Vulnerable (VU)</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    大熊猫、东北虎、中华白海豚
+                                    <span class="term-en">Giant panda, Siberian tiger, Chinese white dolphin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 旗舰物种 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">旗舰物种</h3>
+                        <p class="card-subtitle">Flagship Species</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">旗</span>
+                                <span class="meaning">
+                                    旗帜、标志
+                                    <span class="meaning-en">Flag, symbol</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">舰</span>
+                                <span class="meaning">
+                                    军舰、大型船只
+                                    <span class="meaning-en">Warship, large vessel</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-flag icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    qí jiàn wù zhǒng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    具有广泛公众吸引力的物种，用于提升公众对保护行动的关注和支持
+                                    <span class="term-en">Species with broad public appeal, used to raise awareness and support for conservation actions</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">特点 / Characteristics:</span>
+                                <div class="term-value">
+                                    魅力物种、公众关注度高、象征性强
+                                    <span class="term-en">Charismatic species, high public appeal, strong symbolism</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    大熊猫、老虎、大象、北极熊
+                                    <span class="term-en">Giant panda, Tiger, Elephant, Polar bear</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 伞护物种 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">伞护物种</h3>
+                        <p class="card-subtitle">Umbrella Species</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">伞</span>
+                                <span class="meaning">
+                                    雨伞、保护
+                                    <span class="meaning-en">Umbrella, protection</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">护</span>
+                                <span class="meaning">
+                                    保护、照看
+                                    <span class="meaning-en">Protect, look after</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-umbrella icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    sǎn hù wù zhǒng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    对其栖息地的保护也会保护许多其他共生物种的物种
+                                    <span class="term-en">Species whose conservation confers protection to a large number of naturally co-occurring species in the same habitat</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">特点 / Characteristics:</span>
+                                <div class="term-value">
+                                    栖息地需求广泛、对其他物种有保护伞效应
+                                    <span class="term-en">Broad habitat requirements, provides umbrella effect for other species</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    东北虎、大熊猫、加州秃鹰
+                                    <span class="term-en">Siberian tiger, Giant panda, California condor</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 互动学习标签页 -->
+        <div id="interactive" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-gamepad"></i>互动学习与测验
+                <span class="section-title-en">Interactive Learning & Quizzes</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>测验1：保护生物学基本概念</h3>
+                <p class="quiz-question">
+                    保护生物学的三个主要目标是什么？
+                    <span class="quiz-question-en">What are the three main goals of conservation biology?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 经济发展、社会公平、环境保护
+                        <span class="term-en">A. Economic development, social equity, environmental protection</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        B. 科学研究、公众教育、政策制定
+                        <span class="term-en">B. Scientific research, public education, policy making</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        C. 防止物种灭绝、保护生物多样性、维持生态系统功能
+                        <span class="term-en">C. Prevent species extinction, protect biodiversity, maintain ecosystem function</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 资源开发、栖息地改造、物种引进
+                        <span class="term-en">D. Resource exploitation, habitat modification, species introduction</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：C. 防止物种灭绝、保护生物多样性、维持生态系统功能
+                    <span class="term-en">Correct answer: C. Prevent species extinction, protect biodiversity, maintain ecosystem function</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析：保护生物学的核心目标包括：1) 防止物种灭绝；2) 保护生物多样性（基因、物种和生态系统多样性）；3) 维持生态系统的健康与功能。这些目标共同构成了保护生物学的研究和实践基础。
+                        <span class="term-en">Explanation: The core goals of conservation biology include: 1) Preventing species extinction; 2) Protecting biodiversity (genetic, species, and ecosystem diversity); 3) Maintaining ecosystem health and function. These goals together form the foundation of conservation biology research and practice.</span>
+                    </p>
+                </div>
+                
+                <div class="result incorrect">
+                    <i class="fas fa-times-circle"></i> 回答错误，请再试一次！
+                    <span class="term-en">Incorrect answer, please try again!</span>
+                </div>
+                
+                <button id="checkAnswer1" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+                <button id="resetQuiz1" style="background-color: #ccc; color: #333; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem; margin-left: 1rem;">
+                    重置 / Reset
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>测验2：保护策略与方法</h3>
+                <p class="quiz-question">
+                    下列哪项是"就地保护"的典型例子？
+                    <span class="quiz-question-en">Which of the following is a typical example of "in-situ conservation"?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 动物园饲养繁殖大熊猫
+                        <span class="term-en">A. Captive breeding of giant pandas in zoos</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        B. 建立自然保护区保护野生大熊猫栖息地
+                        <span class="term-en">B. Establishing nature reserves to protect wild panda habitats</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        C. 在种子库中保存植物种子
+                        <span class="term-en">C. Preserving plant seeds in seed banks</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 在植物园中栽培濒危植物
+                        <span class="term-en">D. Cultivating endangered plants in botanical gardens</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：B. 建立自然保护区保护野生大熊猫栖息地
+                    <span class="term-en">Correct answer: B. Establishing nature reserves to protect wild panda habitats</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析：就地保护是指在物种的自然栖息地内对其进行保护。建立自然保护区、国家公园、野生动物保护区等都属于就地保护。而动物园、植物园、种子库等则属于迁地保护，即在自然栖息地外进行保护。
+                        <span class="term-en">Explanation: In-situ conservation refers to protecting species within their natural habitats. Establishing nature reserves, national parks, and wildlife sanctuaries are examples of in-situ conservation. Zoos, botanical gardens, and seed banks, on the other hand, are examples of ex-situ conservation, which protects species outside their natural habitats.</span>
+                    </p>
+                </div>
+                
+                <button id="checkAnswer2" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>学习挑战：术语匹配游戏</h3>
+                <div class="bilingual-text">
+                    <p class="zh">将以下术语与正确的定义匹配：</p>
+                    <p class="en">Match the following terms with their correct definitions:</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background-color: #f0f7f3; padding: 1rem; border-radius: 8px;">
+                        <p><strong>1. 可持续发展 / Sustainable Development</strong></p>
+                        <p><strong>2. 生态廊道 / Ecological Corridor</strong></p>
+                        <p><strong>3. 入侵物种 / Invasive Species</strong></p>
+                    </div>
+                    
+                    <div>
+                        <div class="quiz-option match-option" data-match="3">
+                            A. 被引入新环境的物种，其繁殖和扩散威胁本地生物多样性
+                            <span class="term-en">A. Species introduced to new environments where they reproduce and spread, threatening native biodiversity</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="2">
+                            B. 连接孤立栖息地的自然或人工通道，促进物种迁移和基因流动
+                            <span class="term-en">B. Natural or artificial passages connecting isolated habitats, facilitating species migration and gene flow</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="1">
+                            C. 既满足当代人的需求，又不损害后代人满足其需求能力的发展模式
+                            <span class="term-en">C. Development that meets the needs of the present without compromising the ability of future generations to meet their own needs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 匹配正确！
+                    <span class="term-en">Matching correct!</span>
+                    <p style="margin-top: 0.5rem;">
+                        1-C, 2-B, 3-A
+                    </p>
+                </div>
+                
+                <button id="checkMatch" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查匹配 / Check Matching
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>保护生物学双语学习系统 © 2023</p>
+            <p>设计理念：守护地球家园，传承生命多样性</p>
+            <p class="bilingual en">Design philosophy: Guarding our planet, transmitting life's diversity</p>
+            <p>适合各年龄段学习者 | 联系我们：learning@conservation-biology.org</p>
+            <p class="bilingual en">Suitable for learners of all ages | Contact us: learning@conservation-biology.org</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-leaf"></i> 保护自然，就是保护我们的未来
+                <span class="bilingual en">Protecting nature is protecting our future</span>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // 创建保护动画叶片
+        const conservationAnimation = document.getElementById('conservationAnimation');
+        for (let i = 0; i < 12; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'conservation-leaf';
+            leaf.style.animationDelay = `${Math.random() * 15}s`;
+            leaf.style.left = `${Math.random() * 100}%`;
+            leaf.style.width = `${20 + Math.random() * 20}px`;
+            leaf.style.height = leaf.style.width;
+            conservationAnimation.appendChild(leaf);
+        }
+        
+        // 语言切换功能
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const lang = btn.getAttribute('data-lang');
+                
+                // 移除现有的语言模式类
+                document.body.classList.remove('english-mode');
+                
+                // 显示/隐藏相应的语言内容
+                const chineseElements = document.querySelectorAll('.zh');
+                const englishElements = document.querySelectorAll('.en');
+                
+                if (lang === 'zh') {
+                    // 只显示中文
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'none');
+                } else if (lang === 'en') {
+                    // 只显示英文
+                    chineseElements.forEach(el => el.style.display = 'none');
+                    englishElements.forEach(el => el.style.display = 'block');
+                    document.body.classList.add('english-mode');
+                } else {
+                    // 显示双语
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'block');
+                }
+            });
+        });
+        
+        // 标签页切换功能
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // 隐藏所有内容
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // 激活当前标签
+                tab.classList.add('active');
+                // 显示对应内容
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // 学习级别切换
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const level = btn.getAttribute('data-level');
+                // 根据级别筛选内容
+                filterByLevel(level);
+            });
+        });
+        
+        function filterByLevel(level) {
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .threat-levels, .threat-container');
+            
+            if (level === 'all') {
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'basic') {
+                // 基础级别显示核心概念和简单内容
+                cards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent;
+                    const basicTerms = ['保护生物学', '生物多样性保护', '可持续发展', '就地保护', '濒危物种'];
+                    const basicTermsEn = ['Conservation Biology', 'Biodiversity Conservation', 'Sustainable Development', 'In-situ Conservation', 'Endangered Species'];
+                    
+                    let shouldShow = false;
+                    for (let term of basicTerms) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    for (let term of basicTermsEn) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    if (shouldShow) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                // 显示所有互动部分
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'intermediate') {
+                // 中级级别显示更多内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'advanced') {
+                // 高级级别显示所有内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            }
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .threat-level, .threat-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    card.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                    section.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        section.style.animation = '';
+                    }, 500);
+                }
+            });
+        });
+        
+        // 测验1逻辑
+        const checkAnswer1Btn = document.getElementById('checkAnswer1');
+        const resetQuiz1Btn = document.getElementById('resetQuiz1');
+        const quizOptions1 = document.querySelectorAll('#interactive .interactive-section:first-child .quiz-option');
+        const resultCorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.correct');
+        const resultIncorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.incorrect');
+        
+        checkAnswer1Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions1.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect1.style.display = 'block';
+                resultIncorrect1.style.display = 'none';
+            } else {
+                resultCorrect1.style.display = 'none';
+                resultIncorrect1.style.display = 'block';
+            }
+        });
+        
+        resetQuiz1Btn.addEventListener('click', () => {
+            quizOptions1.forEach(option => {
+                option.classList.remove('selected');
+                option.classList.remove('correct');
+                option.classList.remove('incorrect');
+            });
+            resultCorrect1.style.display = 'none';
+            resultIncorrect1.style.display = 'none';
+        });
+        
+        quizOptions1.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions1.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+                
+                if (option.getAttribute('data-correct') === 'true') {
+                    option.classList.add('correct');
+                } else {
+                    option.classList.add('incorrect');
+                }
+            });
+        });
+        
+        // 测验2逻辑
+        const checkAnswer2Btn = document.getElementById('checkAnswer2');
+        const quizOptions2 = document.querySelectorAll('#interactive .interactive-section:nth-child(2) .quiz-option');
+        const resultCorrect2 = document.querySelector('#interactive .interactive-section:nth-child(2) .result.correct');
+        
+        checkAnswer2Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions2.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect2.style.display = 'block';
+            } else {
+                alert('回答错误，请再试一次！ / Incorrect answer, please try again!');
+            }
+        });
+        
+        quizOptions2.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions2.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+            });
+        });
+        
+        // 匹配测验逻辑
+        const matchOptions = document.querySelectorAll('.match-option');
+        const checkMatchBtn = document.getElementById('checkMatch');
+        const resultCorrect3 = document.querySelector('#interactive .interactive-section:nth-child(3) .result.correct');
+        
+        checkMatchBtn.addEventListener('click', () => {
+            // 简单验证：检查是否所有选项都被选中
+            let allSelected = true;
+            matchOptions.forEach(option => {
+                if (!option.classList.contains('selected')) {
+                    allSelected = false;
+                }
+            });
+            
+            if (!allSelected) {
+                alert('请将左右两边的项目全部匹配！ / Please match all items on both sides!');
+                return;
+            }
+            
+            // 显示结果
+            resultCorrect3.style.display = 'block';
+        });
+        
+        matchOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (option.classList.contains('selected')) {
+                    option.classList.remove('selected');
+                } else {
+                    option.classList.add('selected');
+                }
+            });
+        });
+        
+        // 页面加载后默认显示概览
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('overview').classList.add('active');
+            
+            // 初始化所有英文描述默认显示
+            const englishElements = document.querySelectorAll('.en');
+            englishElements.forEach(el => el.style.display = 'block');
+            
+            // 添加汉字动画效果
+            const chars = document.querySelectorAll('.char');
+            chars.forEach((char, index) => {
+                char.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

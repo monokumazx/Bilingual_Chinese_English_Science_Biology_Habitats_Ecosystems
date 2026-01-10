@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生物多样性科学双语词汇系统 | Biodiversity Science Bilingual System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a9c7d;
+            --secondary: #7bb4a3;
+            --light: #f8f9fa;
+            --dark: #2d5a4a;
+            --accent1: #f4a261;
+            --accent2: #e76f51;
+            --gradient1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient2: linear-gradient(135deg, var(--dark) 0%, #1e3c2f 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7f3;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: white;
+            border-radius: 50px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        header {
+            background: var(--gradient2);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .biodiversity-icon {
+            font-size: 3.5rem;
+            color: var(--accent1);
+            margin-bottom: 1rem;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .header-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .bilingual {
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .bilingual.en {
+            font-style: italic;
+            font-size: 0.9em;
+            opacity: 0.9;
+            border-left: 3px solid var(--accent1);
+            padding-left: 10px;
+            margin-top: 5px;
+        }
+        
+        .diversity-animation {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            opacity: 0.3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .diversity-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: diversityFloat 8s infinite linear;
+        }
+        
+        @keyframes diversityFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            25% { transform: translateY(-15px) scale(1.2); opacity: 0.8; }
+            50% { transform: translateY(0) scale(0.8); opacity: 0.6; }
+            75% { transform: translateY(15px) scale(1.1); opacity: 0.7; }
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tab {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background-color: var(--accent2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .section-title-en {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.8;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: var(--gradient1);
+            color: white;
+            padding: 1.2rem;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .character-breakdown {
+            background-color: #f0f7f3;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .char-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .char {
+            font-weight: bold;
+            color: var(--dark);
+            min-width: 24px;
+            text-align: center;
+            margin-right: 8px;
+            background-color: #e6f2ee;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        
+        .meaning {
+            color: #555;
+            flex: 1;
+        }
+        
+        .meaning-en {
+            font-size: 0.85em;
+            color: #777;
+            margin-left: 5px;
+            font-style: italic;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .visual-aid {
+            height: 120px;
+            background-color: #e9f5f1;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .biodiversity-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .icon-placeholder {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+        
+        .term-details {
+            margin-top: 1rem;
+        }
+        
+        .term-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .term-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--primary);
+        }
+        
+        .term-value {
+            flex: 1;
+        }
+        
+        .term-en {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 3px;
+            padding-left: 10px;
+            border-left: 2px solid #e0e0e0;
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border 0.3s;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .interactive-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .quiz-question-en {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .quiz-option {
+            padding: 1rem;
+            background-color: #f0f7f3;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e6f2ee;
+        }
+        
+        .quiz-option.correct {
+            background-color: #d4edda;
+            border-color: #a3de83;
+            color: #155724;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .result.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .diversity-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .diversity-level {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-top: 3px solid var(--primary);
+        }
+        
+        .diversity-level:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .level-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            background-color: rgba(244, 162, 97, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .concept-chain {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .chain-item {
+            background: var(--gradient1);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chain-item-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .chain-arrow {
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .learning-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent2);
+        }
+        
+        .character-animation {
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .process-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .process-step {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            width: 200px;
+            margin: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--primary);
+        }
+        
+        .process-step-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .process-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0 1rem;
+        }
+        
+        .hierarchical-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .hierarchical-level {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .level-label {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-right: 1rem;
+            min-width: 120px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .level-label-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+        }
+        
+        .level-content {
+            background-color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+        
+        .level-content-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .bilingual-text {
+            margin-bottom: 1rem;
+        }
+        
+        .text-en {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95em;
+            margin-top: 5px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent1);
+        }
+        
+        .gender-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            gap: 2rem;
+        }
+        
+        .gender-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 300px;
+            border-top: 5px solid var(--primary);
+        }
+        
+        .gender-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .male-icon {
+            color: #4a90e2;
+        }
+        
+        .female-icon {
+            color: #e24a9c;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+            }
+            
+            .process-diagram {
+                flex-direction: column;
+            }
+            
+            .process-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+            
+            .language-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+            
+            .gender-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .english-mode .zh {
+            opacity: 0.7;
+        }
+        
+        .english-mode .en {
+            font-weight: 600;
+            opacity: 1;
+        }
+        
+        .taxonomy-chart {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .taxonomy-level {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            width: 150px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--secondary);
+        }
+        
+        .taxonomy-level.highlighted {
+            border-color: var(--accent2);
+            background-color: #f9f5f0;
+        }
+        
+        .taxonomy-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <button class="lang-btn active" data-lang="both">中英双语</button>
+        <button class="lang-btn" data-lang="zh">仅中文</button>
+        <button class="lang-btn" data-lang="en">English Only</button>
+    </div>
+    
+    <header>
+        <div class="header-content">
+            <div class="biodiversity-icon">
+                <i class="fas fa-dna"></i>
+            </div>
+            <h1>生物多样性科学双语词汇系统</h1>
+            <p class="subtitle">Biodiversity Science Bilingual Vocabulary System</p>
+            <p class="header-description">
+                探索生命的多样性、学习基因与物种、理解自然界的丰富性
+                <span class="bilingual en">Explore life's diversity, learn about genes and species, understand nature's richness</span>
+            </p>
+            
+            <div class="learning-level">
+                <button class="level-btn active" data-level="all">全部级别 / All Levels</button>
+                <button class="level-btn" data-level="basic">初级学习 / Beginner</button>
+                <button class="level-btn" data-level="intermediate">中级学习 / Intermediate</button>
+                <button class="level-btn" data-level="advanced">高级学习 / Advanced</button>
+            </div>
+        </div>
+        
+        <div class="diversity-animation" id="diversityAnimation">
+            <!-- 多样性点将通过JS动态生成 -->
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" data-tab="overview">概览 / Overview</button>
+            <button class="tab" data-tab="core">核心概念 / Core Concepts</button>
+            <button class="tab" data-tab="genetics">遗传学 / Genetics</button>
+            <button class="tab" data-tab="gender">性别与繁殖 / Gender & Reproduction</button>
+            <button class="tab" data-tab="taxonomy">分类学 / Taxonomy</button>
+            <button class="tab" data-tab="conservation">保护 / Conservation</button>
+            <button class="tab" data-tab="interactive">互动学习 / Interactive Learning</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索生物多样性相关词汇 (中/英文均可)... / Search biodiversity terms (Chinese/English)...">
+        </div>
+        
+        <!-- 概览标签页 -->
+        <div id="overview" class="tab-content active">
+            <h2 class="section-title">
+                <i class="fas fa-seedling"></i>生物多样性学习概览
+                <span class="section-title-en">Biodiversity Learning Overview</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>什么是生物多样性？</h3>
+                <div class="bilingual-text">
+                    <p class="zh">生物多样性是指地球上所有生命形式（包括基因、物种和生态系统）的丰富程度和多样性。它是生命的基础，支撑着生态系统的功能和服务。</p>
+                    <p class="en">Biodiversity refers to the variety and variability of life on Earth at all levels, including genes, species, and ecosystems. It is the foundation of life and supports ecosystem functions and services.</p>
+                </div>
+                
+                <div class="concept-chain">
+                    <div class="chain-item">
+                        基因多样性
+                        <span class="chain-item-en">Genetic Diversity</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-plus"></i></div>
+                    <div class="chain-item">
+                        物种多样性
+                        <span class="chain-item-en">Species Diversity</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-plus"></i></div>
+                    <div class="chain-item">
+                        生态系统多样性
+                        <span class="chain-item-en">Ecosystem Diversity</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-equals"></i></div>
+                    <div class="chain-item">
+                        生物多样性
+                        <span class="chain-item-en">Biodiversity</span>
+                    </div>
+                </div>
+                
+                <div class="hierarchical-chart">
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            生物多样性
+                            <span class="level-label-en">Biodiversity</span>
+                        </div>
+                        <div class="level-content">
+                            地球上所有生命形式的多样性
+                            <div class="level-content-en">Diversity of all life forms on Earth</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            生态系统多样性
+                            <span class="level-label-en">Ecosystem Diversity</span>
+                        </div>
+                        <div class="level-content">
+                            不同生态系统类型及其过程的多样性
+                            <div class="level-content-en">Diversity of ecosystem types and their processes</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            物种多样性
+                            <span class="level-label-en">Species Diversity</span>
+                        </div>
+                        <div class="level-content">
+                            一个地区内物种的丰富度和均匀度
+                            <div class="level-content-en">Richness and evenness of species in an area</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            基因多样性
+                            <span class="level-label-en">Genetic Diversity</span>
+                        </div>
+                        <div class="level-content">
+                            同一物种内不同个体间遗传信息的差异
+                            <div class="level-content-en">Genetic variation among individuals within a species</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">汉字中的科学：以"生物多样性"为例</h3>
+                <div class="character-breakdown">
+                    <div class="char-item">
+                        <span class="char">生</span>
+                        <span class="meaning">
+                            草木破土而出 → 生命
+                            <span class="meaning-en">Plants breaking through soil → life</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">物</span>
+                        <span class="meaning">
+                            牛 + 勿 → 万物、事物
+                            <span class="meaning-en">"Cow" + "not" → all things, matter</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">多</span>
+                        <span class="meaning">
+                            夕 + 夕 → 数量大
+                            <span class="meaning-en">"Evening" + "evening" → many, numerous</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">样</span>
+                        <span class="meaning">
+                            木 + 羊 → 式样、种类
+                            <span class="meaning-en">"Wood" + "sheep" → pattern, type, variety</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">性</span>
+                        <span class="meaning">
+                            忄 + 生 → 性质
+                            <span class="meaning-en">"Heart" + "life" → nature, property</span>
+                        </span>
+                    </div>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">
+                        "生物多样性"五字合义：生命形式的种类和数量丰富性
+                        <span class="meaning-en">"Biodiversity": The richness of life forms in variety and quantity</span>
+                    </p>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>生物多样性的重要性
+                <span class="section-title-en">Importance of Biodiversity</span>
+            </h2>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生态功能</h3>
+                        <p class="card-subtitle">Ecological Functions</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生物多样性维持生态系统的稳定性和生产力，包括养分循环、土壤形成、授粉、害虫控制等。</p>
+                            <p class="en">Biodiversity maintains ecosystem stability and productivity, including nutrient cycling, soil formation, pollination, pest control, etc.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-recycle icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    蜜蜂为植物授粉，确保粮食生产
+                                    <span class="term-en">Bees pollinate plants, ensuring food production</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">经济价值</h3>
+                        <p class="card-subtitle">Economic Value</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生物多样性提供食物、药物、原材料等资源，支持农业、渔业、林业和旅游业。</p>
+                            <p class="en">Biodiversity provides resources like food, medicine, and raw materials, supporting agriculture, fisheries, forestry, and tourism.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-pills icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    许多药物来源于植物和微生物
+                                    <span class="term-en">Many medicines originate from plants and microorganisms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">文化价值</h3>
+                        <p class="card-subtitle">Cultural Value</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生物多样性为人类提供美学、精神、教育和休闲价值，是文化遗产的重要组成部分。</p>
+                            <p class="en">Biodiversity provides aesthetic, spiritual, educational, and recreational values to humans, forming an important part of cultural heritage.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-palette icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    国家公园和自然保护区提供休闲和教育机会
+                                    <span class="term-en">National parks and nature reserves provide recreation and education opportunities</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心概念标签页 -->
+        <div id="core" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>核心概念与术语
+                <span class="section-title-en">Core Concepts & Terminology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 生物多样性 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生物多样性</h3>
+                        <p class="card-subtitle">Biodiversity</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    生命、生物
+                                    <span class="meaning-en">Life, organism</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    事物、物种
+                                    <span class="meaning-en">Thing, species</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">多</span>
+                                <span class="meaning">
+                                    数量大
+                                    <span class="meaning-en">Many, numerous</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">样</span>
+                                <span class="meaning">
+                                    式样、种类
+                                    <span class="meaning-en">Pattern, type, variety</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    性质
+                                    <span class="meaning-en">Nature, property</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-dna icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng wù duō yàng xìng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    地球上所有生命形式（包括基因、物种和生态系统）的丰富程度和多样性
+                                    <span class="term-en">The variety and variability of life on Earth at all levels, including genes, species, and ecosystems</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    The variety of life in all its forms, levels and combinations
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">三个层次 / Three Levels:</span>
+                                <div class="term-value">
+                                    基因多样性、物种多样性、生态系统多样性
+                                    <span class="term-en">Genetic diversity, species diversity, ecosystem diversity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 物种 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">物种</h3>
+                        <p class="card-subtitle">Species</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    事物、生物
+                                    <span class="meaning-en">Thing, organism</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">种</span>
+                                <span class="meaning">
+                                    种子、种类
+                                    <span class="meaning-en">Seed, kind, type</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-dove icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    wù zhǒng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    生物分类的基本单位，能够相互交配并产生可育后代的个体群
+                                    <span class="term-en">The basic unit of biological classification, a group of individuals that can interbreed and produce fertile offspring</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    A group of organisms that can interbreed and produce fertile offspring
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    人类 (Homo sapiens)、老虎 (Panthera tigris)
+                                    <span class="term-en">Human (Homo sapiens), Tiger (Panthera tigris)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 种群 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">种群</h3>
+                        <p class="card-subtitle">Population</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">种</span>
+                                <span class="meaning">
+                                    种类
+                                    <span class="meaning-en">Kind, type</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">群</span>
+                                <span class="meaning">
+                                    群体、集合
+                                    <span class="meaning-en">Group, collection</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-users icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    zhǒng qún
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    同一区域中同种生物个体的集合
+                                    <span class="term-en">A group of individuals of the same species living in the same area</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    A group of individuals of the same species that live in the same area and can potentially interbreed
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    某森林中的所有东北虎个体
+                                    <span class="term-en">All Siberian tiger individuals in a particular forest</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-layer-group"></i>生物多样性的三个层次
+                <span class="section-title-en">Three Levels of Biodiversity</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <div class="diversity-levels">
+                    <div class="diversity-level">
+                        <div class="level-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h4>基因多样性</h4>
+                        <p>Genetic Diversity</p>
+                        <div class="bilingual-text">
+                            <p class="zh">同一物种内不同个体间遗传信息的差异。</p>
+                            <p class="en">Genetic variation among individuals within a species.</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">重要性:</span>
+                                <div class="term-value">
+                                    增强物种适应环境变化的能力
+                                    <span class="term-en">Enhances species' ability to adapt to environmental changes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="diversity-level">
+                        <div class="level-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                        <h4>物种多样性</h4>
+                        <p>Species Diversity</p>
+                        <div class="bilingual-text">
+                            <p class="zh">一个地区或生态系统中物种的丰富程度和均匀度。</p>
+                            <p class="en">The richness and evenness of species in an area or ecosystem.</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">重要性:</span>
+                                <div class="term-value">
+                                    维持生态系统功能和稳定性
+                                    <span class="term-en">Maintains ecosystem function and stability</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="diversity-level">
+                        <div class="level-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h4>生态系统多样性</h4>
+                        <p>Ecosystem Diversity</p>
+                        <div class="bilingual-text">
+                            <p class="zh">不同生态系统类型（如森林、草原、湿地）的多样性。</p>
+                            <p class="en">The variety of ecosystem types (e.g., forests, grasslands, wetlands).</p>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">重要性:</span>
+                                <div class="term-value">
+                                    提供多种生态服务和资源
+                                    <span class="term-en">Provides various ecosystem services and resources</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 性别与繁殖标签页 -->
+        <div id="gender" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-venus-mars"></i>性别与繁殖
+                <span class="section-title-en">Gender & Reproduction</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>生物性别的基本区分</h3>
+                <div class="bilingual-text">
+                    <p class="zh">在大多数生物中，性别分为雄性和雌性，分别产生精子和卵子，通过有性繁殖结合产生后代。</p>
+                    <p class="en">In most organisms, sexes are divided into male and female, producing sperm and eggs respectively, which combine through sexual reproduction to produce offspring.</p>
+                </div>
+                
+                <div class="gender-container">
+                    <div class="gender-card">
+                        <div class="gender-icon male-icon">
+                            <i class="fas fa-mars"></i>
+                        </div>
+                        <h3>雄性</h3>
+                        <p class="card-subtitle">Male</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">雄</span>
+                                <span class="meaning">
+                                    从"厷"从"隹" → 公鸟
+                                    <span class="meaning-en">From "厷" + "隹" → male bird</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    性质、性别
+                                    <span class="meaning-en">Nature, gender</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    产生精子的生物性别
+                                    <span class="term-en">The biological sex that produces sperm</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">特征:</span>
+                                <div class="term-value">
+                                    通常具有XY染色体（哺乳动物）
+                                    <span class="term-en">Typically has XY chromosomes (mammals)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gender-card">
+                        <div class="gender-icon female-icon">
+                            <i class="fas fa-venus"></i>
+                        </div>
+                        <h3>雌性</h3>
+                        <p class="card-subtitle">Female</p>
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">雌</span>
+                                <span class="meaning">
+                                    从"此"从"隹" → 母鸟
+                                    <span class="meaning-en">From "此" + "隹" → female bird</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    性质、性别
+                                    <span class="meaning-en">Nature, gender</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">定义:</span>
+                                <div class="term-value">
+                                    产生卵子的生物性别
+                                    <span class="term-en">The biological sex that produces eggs</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">特征:</span>
+                                <div class="term-value">
+                                    通常具有XX染色体（哺乳动物）
+                                    <span class="term-en">Typically has XX chromosomes (mammals)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">
+                <i class="fas fa-baby"></i>繁殖方式
+                <span class="section-title-en">Reproduction Methods</span>
+            </h3>
+            
+            <div class="cards-container">
+                <!-- 有性繁殖 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">有性繁殖</h3>
+                        <p class="card-subtitle">Sexual Reproduction</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">有</span>
+                                <span class="meaning">
+                                    存在、具有
+                                    <span class="meaning-en">Exist, have</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    性别
+                                    <span class="meaning-en">Gender, sex</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">繁</span>
+                                <span class="meaning">
+                                    繁多、繁殖
+                                    <span class="meaning-en">Many, reproduce</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">殖</span>
+                                <span class="meaning">
+                                    生育、滋生
+                                    <span class="meaning-en">Breed, multiply</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-heart icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    yǒu xìng fán zhí
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    通过两性生殖细胞（精子和卵子）结合产生后代的繁殖方式
+                                    <span class="term-en">Reproduction involving the combination of male and female gametes (sperm and egg) to produce offspring</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">优点 / Advantages:</span>
+                                <div class="term-value">
+                                    增加遗传多样性，增强适应能力
+                                    <span class="term-en">Increases genetic diversity, enhances adaptability</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    人类、大多数动物、开花植物
+                                    <span class="term-en">Humans, most animals, flowering plants</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 无性繁殖 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">无性繁殖</h3>
+                        <p class="card-subtitle">Asexual Reproduction</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">无</span>
+                                <span class="meaning">
+                                    没有、不
+                                    <span class="meaning-en">Without, not</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    性别
+                                    <span class="meaning-en">Gender, sex</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-clone icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    wú xìng fán zhí
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    不经过两性生殖细胞结合，由母体直接产生后代的繁殖方式
+                                    <span class="term-en">Reproduction without the fusion of gametes, offspring arise from a single parent</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">优点 / Advantages:</span>
+                                <div class="term-value">
+                                    快速、高效，不需要寻找配偶
+                                    <span class="term-en">Fast, efficient, no need to find a mate</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    细菌分裂、酵母出芽、植物扦插
+                                    <span class="term-en">Bacterial fission, yeast budding, plant cuttings</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 受精 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">受精</h3>
+                        <p class="card-subtitle">Fertilization</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">受</span>
+                                <span class="meaning">
+                                    接受、承受
+                                    <span class="meaning-en">Receive, accept</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">精</span>
+                                <span class="meaning">
+                                    精华、精子
+                                    <span class="meaning-en">Essence, sperm</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-plus icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shòu jīng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    精子与卵子结合形成受精卵的过程
+                                    <span class="term-en">The process of sperm and egg combining to form a zygote</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">类型 / Types:</span>
+                                <div class="term-value">
+                                    体内受精（哺乳动物）、体外受精（鱼类、两栖类）
+                                    <span class="term-en">Internal fertilization (mammals), external fertilization (fish, amphibians)</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">结果 / Result:</span>
+                                <div class="term-value">
+                                    形成受精卵，开始胚胎发育
+                                    <span class="term-en">Forms a zygote, beginning embryonic development</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">
+                <i class="fas fa-microscope"></i>生殖细胞
+                <span class="section-title-en">Gametes</span>
+            </h3>
+            
+            <div class="process-diagram">
+                <div class="process-step">
+                    <h4>精子 / Sperm</h4>
+                    <p class="process-step-en">Male gamete</p>
+                    <p>雄性生殖细胞</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-plus"></i></div>
+                <div class="process-step">
+                    <h4>卵子 / Egg</h4>
+                    <p class="process-step-en">Female gamete</p>
+                    <p>雌性生殖细胞</p>
+                </div>
+                <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="process-step highlighted">
+                    <h4>受精卵 / Zygote</h4>
+                    <p class="process-step-en">Fertilized egg</p>
+                    <p>新个体的开始</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 分类学标签页 -->
+        <div id="taxonomy" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-sitemap"></i>生物分类学
+                <span class="section-title-en">Biological Taxonomy</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>生物分类系统</h3>
+                <div class="bilingual-text">
+                    <p class="zh">生物分类学是对生物进行鉴定、命名和分类的科学。现代分类系统采用七个主要等级，从最广泛到最具体。</p>
+                    <p class="en">Biological taxonomy is the science of identifying, naming, and classifying organisms. The modern classification system uses seven main ranks, from broadest to most specific.</p>
+                </div>
+                
+                <div class="taxonomy-chart">
+                    <div class="taxonomy-level">
+                        <h4>界</h4>
+                        <p>Kingdom</p>
+                        <div class="bilingual-text">
+                            <p class="zh">最广泛的分类等级</p>
+                            <p class="en">Broadest classification rank</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level">
+                        <h4>门</h4>
+                        <p>Phylum</p>
+                        <div class="bilingual-text">
+                            <p class="zh">界下的主要分支</p>
+                            <p class="en">Major division under kingdom</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level">
+                        <h4>纲</h4>
+                        <p>Class</p>
+                        <div class="bilingual-text">
+                            <p class="zh">门下的分类群</p>
+                            <p class="en">Group under phylum</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level">
+                        <h4>目</h4>
+                        <p>Order</p>
+                        <div class="bilingual-text">
+                            <p class="zh">纲下的分类群</p>
+                            <p class="en">Group under class</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level">
+                        <h4>科</h4>
+                        <p>Family</p>
+                        <div class="bilingual-text">
+                            <p class="zh">目下的分类群</p>
+                            <p class="en">Group under order</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level">
+                        <h4>属</h4>
+                        <p>Genus</p>
+                        <div class="bilingual-text">
+                            <p class="zh">科下的分类群</p>
+                            <p class="en">Group under family</p>
+                        </div>
+                    </div>
+                    <div class="taxonomy-connector"><i class="fas fa-arrow-down"></i></div>
+                    <div class="taxonomy-level highlighted">
+                        <h4>种</h4>
+                        <p>Species</p>
+                        <div class="bilingual-text">
+                            <p class="zh">分类的基本单位</p>
+                            <p class="en">Basic unit of classification</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">
+                <i class="fas fa-tags"></i>学名与双名法
+                <span class="section-title-en">Scientific Names & Binomial Nomenclature</span>
+            </h3>
+            
+            <div class="cards-container">
+                <!-- 学名 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">学名</h3>
+                        <p class="card-subtitle">Scientific Name</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">学</span>
+                                <span class="meaning">
+                                    学习、学问
+                                    <span class="meaning-en">Study, learning</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">名</span>
+                                <span class="meaning">
+                                    名称
+                                    <span class="meaning-en">Name</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-scroll icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    xué míng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    按照双名法给物种起的拉丁文名称，由属名和种加词组成
+                                    <span class="term-en">The Latin name given to a species according to binomial nomenclature, consisting of genus name and specific epithet</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">格式 / Format:</span>
+                                <div class="term-value">
+                                    属名（首字母大写）+ 种加词（小写），斜体
+                                    <span class="term-en">Genus name (capitalized) + specific epithet (lowercase), italicized</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    人类：<i>Homo sapiens</i>
+                                    <span class="term-en">Human: <i>Homo sapiens</i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 双名法 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">双名法</h3>
+                        <p class="card-subtitle">Binomial Nomenclature</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">双</span>
+                                <span class="meaning">
+                                    两个、一对
+                                    <span class="meaning-en">Two, pair</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">名</span>
+                                <span class="meaning">
+                                    名称
+                                    <span class="meaning-en">Name</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">法</span>
+                                <span class="meaning">
+                                    方法、规则
+                                    <span class="meaning-en">Method, rule</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-font icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shuāng míng fǎ
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    由卡尔·林奈创立的物种命名系统，每个物种的名称由两部分组成
+                                    <span class="term-en">The system of naming species created by Carl Linnaeus, where each species name consists of two parts</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">优点 / Advantages:</span>
+                                <div class="term-value">
+                                    全球统一，避免混淆
+                                    <span class="term-en">Globally consistent, avoids confusion</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    老虎：<i>Panthera tigris</i>（Panthera = 属名，tigris = 种加词）
+                                    <span class="term-en">Tiger: <i>Panthera tigris</i> (Panthera = genus, tigris = specific epithet)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 互动学习标签页 -->
+        <div id="interactive" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-gamepad"></i>互动学习与测验
+                <span class="section-title-en">Interactive Learning & Quizzes</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>测验1：生物多样性基本概念</h3>
+                <p class="quiz-question">
+                    生物多样性的三个层次是什么？
+                    <span class="quiz-question-en">What are the three levels of biodiversity?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 个体、种群、群落
+                        <span class="term-en">A. Individual, population, community</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        B. 基因多样性、物种多样性、生态系统多样性
+                        <span class="term-en">B. Genetic diversity, species diversity, ecosystem diversity</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        C. 植物、动物、微生物
+                        <span class="term-en">C. Plants, animals, microorganisms</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 陆地、水域、大气
+                        <span class="term-en">D. Terrestrial, aquatic, atmospheric</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：B. 基因多样性、物种多样性、生态系统多样性
+                    <span class="term-en">Correct answer: B. Genetic diversity, species diversity, ecosystem diversity</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析：生物多样性包括三个层次：1) 基因多样性（同一物种内遗传变异）；2) 物种多样性（一个地区内物种的丰富度）；3) 生态系统多样性（不同生态系统类型的多样性）。
+                        <span class="term-en">Explanation: Biodiversity includes three levels: 1) Genetic diversity (genetic variation within a species); 2) Species diversity (richness of species in an area); 3) Ecosystem diversity (diversity of ecosystem types).</span>
+                    </p>
+                </div>
+                
+                <div class="result incorrect">
+                    <i class="fas fa-times-circle"></i> 回答错误，请再试一次！
+                    <span class="term-en">Incorrect answer, please try again!</span>
+                </div>
+                
+                <button id="checkAnswer1" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+                <button id="resetQuiz1" style="background-color: #ccc; color: #333; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem; margin-left: 1rem;">
+                    重置 / Reset
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>测验2：性别与繁殖</h3>
+                <p class="quiz-question">
+                    下列哪项是有性繁殖的主要优点？
+                    <span class="quiz-question-en">What is the main advantage of sexual reproduction?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 繁殖速度快，不需要配偶
+                        <span class="term-en">A. Fast reproduction, no mate needed</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        B. 后代与亲本完全相同
+                        <span class="term-en">B. Offspring are identical to parents</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        C. 增加遗传多样性，增强适应能力
+                        <span class="term-en">C. Increases genetic diversity, enhances adaptability</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 能量消耗少，效率高
+                        <span class="term-en">D. Low energy consumption, high efficiency</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：C. 增加遗传多样性，增强适应能力
+                    <span class="term-en">Correct answer: C. Increases genetic diversity, enhances adaptability</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析：有性繁殖通过基因重组产生遗传上独特的后代，增加种群遗传多样性，使物种更能适应环境变化。无性繁殖（A、B、D项描述的特点）虽然快速高效，但遗传多样性低。
+                        <span class="term-en">Explanation: Sexual reproduction produces genetically unique offspring through recombination, increasing population genetic diversity and making species more adaptable to environmental changes. Asexual reproduction (described in options A, B, D) is fast and efficient but has low genetic diversity.</span>
+                    </p>
+                </div>
+                
+                <button id="checkAnswer2" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>学习挑战：术语匹配游戏</h3>
+                <div class="bilingual-text">
+                    <p class="zh">将以下术语与正确的定义匹配：</p>
+                    <p class="en">Match the following terms with their correct definitions:</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background-color: #f0f7f3; padding: 1rem; border-radius: 8px;">
+                        <p><strong>1. 物种 / Species</strong></p>
+                        <p><strong>2. 种群 / Population</strong></p>
+                        <p><strong>3. 基因多样性 / Genetic Diversity</strong></p>
+                    </div>
+                    
+                    <div>
+                        <div class="quiz-option match-option" data-match="3">
+                            A. 同一物种内不同个体间遗传信息的差异
+                            <span class="term-en">A. Genetic variation among individuals within a species</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="2">
+                            B. 同一区域中同种生物个体的集合
+                            <span class="term-en">B. A group of individuals of the same species living in the same area</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="1">
+                            C. 能够相互交配并产生可育后代的个体群
+                            <span class="term-en">C. A group of individuals that can interbreed and produce fertile offspring</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 匹配正确！
+                    <span class="term-en">Matching correct!</span>
+                    <p style="margin-top: 0.5rem;">
+                        1-C, 2-B, 3-A
+                    </p>
+                </div>
+                
+                <button id="checkMatch" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查匹配 / Check Matching
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>生物多样性科学双语学习系统 © 2023</p>
+            <p>设计理念：探索生命多样性，保护地球家园</p>
+            <p class="bilingual en">Design philosophy: Explore life's diversity, protect our planet</p>
+            <p>适合各年龄段学习者 | 联系我们：learning@biodiversity-science.org</p>
+            <p class="bilingual en">Suitable for learners of all ages | Contact us: learning@biodiversity-science.org</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-leaf"></i> 多样生命，共同未来
+                <span class="bilingual en">Diverse life, shared future</span>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // 创建多样性动画点
+        const diversityAnimation = document.getElementById('diversityAnimation');
+        const colors = ['#4a9c7d', '#7bb4a3', '#f4a261', '#e76f51', '#e9c46a', '#2a9d8f'];
+        
+        for (let i = 0; i < 20; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'diversity-dot';
+            dot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            dot.style.animationDelay = `${Math.random() * 8}s`;
+            dot.style.animationDuration = `${4 + Math.random() * 8}s`;
+            diversityAnimation.appendChild(dot);
+        }
+        
+        // 语言切换功能
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const lang = btn.getAttribute('data-lang');
+                
+                // 移除现有的语言模式类
+                document.body.classList.remove('english-mode');
+                
+                // 显示/隐藏相应的语言内容
+                const chineseElements = document.querySelectorAll('.zh');
+                const englishElements = document.querySelectorAll('.en');
+                
+                if (lang === 'zh') {
+                    // 只显示中文
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'none');
+                } else if (lang === 'en') {
+                    // 只显示英文
+                    chineseElements.forEach(el => el.style.display = 'none');
+                    englishElements.forEach(el => el.style.display = 'block');
+                    document.body.classList.add('english-mode');
+                } else {
+                    // 显示双语
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'block');
+                }
+            });
+        });
+        
+        // 标签页切换功能
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // 隐藏所有内容
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // 激活当前标签
+                tab.classList.add('active');
+                // 显示对应内容
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // 学习级别切换
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const level = btn.getAttribute('data-level');
+                // 根据级别筛选内容
+                filterByLevel(level);
+            });
+        });
+        
+        function filterByLevel(level) {
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .diversity-levels, .gender-container');
+            
+            if (level === 'all') {
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'basic') {
+                // 基础级别显示核心概念和简单内容
+                cards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent;
+                    const basicTerms = ['生物多样性', '物种', '雄性', '雌性', '有性繁殖'];
+                    const basicTermsEn = ['Biodiversity', 'Species', 'Male', 'Female', 'Sexual Reproduction'];
+                    
+                    let shouldShow = false;
+                    for (let term of basicTerms) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    for (let term of basicTermsEn) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    if (shouldShow) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                // 显示所有互动部分
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'intermediate') {
+                // 中级级别显示更多内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'advanced') {
+                // 高级级别显示所有内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            }
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .diversity-level, .gender-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    card.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                    section.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        section.style.animation = '';
+                    }, 500);
+                }
+            });
+        });
+        
+        // 测验1逻辑
+        const checkAnswer1Btn = document.getElementById('checkAnswer1');
+        const resetQuiz1Btn = document.getElementById('resetQuiz1');
+        const quizOptions1 = document.querySelectorAll('#interactive .interactive-section:first-child .quiz-option');
+        const resultCorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.correct');
+        const resultIncorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.incorrect');
+        
+        checkAnswer1Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions1.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect1.style.display = 'block';
+                resultIncorrect1.style.display = 'none';
+            } else {
+                resultCorrect1.style.display = 'none';
+                resultIncorrect1.style.display = 'block';
+            }
+        });
+        
+        resetQuiz1Btn.addEventListener('click', () => {
+            quizOptions1.forEach(option => {
+                option.classList.remove('selected');
+                option.classList.remove('correct');
+                option.classList.remove('incorrect');
+            });
+            resultCorrect1.style.display = 'none';
+            resultIncorrect1.style.display = 'none';
+        });
+        
+        quizOptions1.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions1.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+                
+                if (option.getAttribute('data-correct') === 'true') {
+                    option.classList.add('correct');
+                } else {
+                    option.classList.add('incorrect');
+                }
+            });
+        });
+        
+        // 测验2逻辑
+        const checkAnswer2Btn = document.getElementById('checkAnswer2');
+        const quizOptions2 = document.querySelectorAll('#interactive .interactive-section:nth-child(2) .quiz-option');
+        const resultCorrect2 = document.querySelector('#interactive .interactive-section:nth-child(2) .result.correct');
+        
+        checkAnswer2Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions2.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect2.style.display = 'block';
+            } else {
+                alert('回答错误，请再试一次！ / Incorrect answer, please try again!');
+            }
+        });
+        
+        quizOptions2.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions2.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+            });
+        });
+        
+        // 匹配测验逻辑
+        const matchOptions = document.querySelectorAll('.match-option');
+        const checkMatchBtn = document.getElementById('checkMatch');
+        const resultCorrect3 = document.querySelector('#interactive .interactive-section:nth-child(3) .result.correct');
+        
+        checkMatchBtn.addEventListener('click', () => {
+            // 简单验证：检查是否所有选项都被选中
+            let allSelected = true;
+            matchOptions.forEach(option => {
+                if (!option.classList.contains('selected')) {
+                    allSelected = false;
+                }
+            });
+            
+            if (!allSelected) {
+                alert('请将左右两边的项目全部匹配！ / Please match all items on both sides!');
+                return;
+            }
+            
+            // 显示结果
+            resultCorrect3.style.display = 'block';
+        });
+        
+        matchOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (option.classList.contains('selected')) {
+                    option.classList.remove('selected');
+                } else {
+                    option.classList.add('selected');
+                }
+            });
+        });
+        
+        // 页面加载后默认显示概览
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('overview').classList.add('active');
+            
+            // 初始化所有英文描述默认显示
+            const englishElements = document.querySelectorAll('.en');
+            englishElements.forEach(el => el.style.display = 'block');
+            
+            // 添加汉字动画效果
+            const chars = document.querySelectorAll('.char');
+            chars.forEach((char, index) => {
+                char.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

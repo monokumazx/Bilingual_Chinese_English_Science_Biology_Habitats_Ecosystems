@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生态系统科学双语词汇学习系统 | Ecosystem Science Bilingual Learning System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a9d8f;
+            --secondary: #8ab17d;
+            --light: #f8f9fa;
+            --dark: #264653;
+            --accent1: #e9c46a;
+            --accent2: #e76f51;
+            --gradient1: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient2: linear-gradient(135deg, var(--dark) 0%, #1d3557 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: white;
+            border-radius: 50px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .lang-btn {
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        header {
+            background: var(--gradient2);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .ecosystem-icon {
+            font-size: 3.5rem;
+            color: var(--accent1);
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .header-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .bilingual {
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .bilingual.en {
+            font-style: italic;
+            font-size: 0.9em;
+            opacity: 0.9;
+            border-left: 3px solid var(--accent1);
+            padding-left: 10px;
+            margin-top: 5px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tab {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background-color: var(--accent2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .section-title-en {
+            font-size: 1.2rem;
+            color: var(--dark);
+            opacity: 0.8;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--primary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background: var(--gradient1);
+            color: white;
+            padding: 1.2rem;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .character-breakdown {
+            background-color: #f0f7f5;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .char-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .char {
+            font-weight: bold;
+            color: var(--dark);
+            min-width: 24px;
+            text-align: center;
+            margin-right: 8px;
+            background-color: #e6f2f0;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        
+        .meaning {
+            color: #555;
+        }
+        
+        .meaning-en {
+            font-size: 0.85em;
+            color: #777;
+            margin-left: 5px;
+            font-style: italic;
+        }
+        
+        .visual-aid {
+            height: 120px;
+            background-color: #e9f5f4;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .eco-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .icon-placeholder {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+        
+        .term-details {
+            margin-top: 1rem;
+        }
+        
+        .term-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .term-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--primary);
+        }
+        
+        .term-value {
+            flex: 1;
+        }
+        
+        .term-en {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 3px;
+            padding-left: 10px;
+            border-left: 2px solid #e0e0e0;
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border 0.3s;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .interactive-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .quiz-question-en {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .quiz-option {
+            padding: 1rem;
+            background-color: #f0f7f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e6f2f0;
+        }
+        
+        .quiz-option.correct {
+            background-color: #d4edda;
+            border-color: #a3de83;
+            color: #155724;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .result.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .ecosystem-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .ecosystem-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-top: 3px solid var(--primary);
+        }
+        
+        .ecosystem-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .ecosystem-icon-small {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            background-color: rgba(233, 196, 106, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .concept-chain {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .chain-item {
+            background: var(--gradient1);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chain-item-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .chain-arrow {
+            color: var(--primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .learning-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent2);
+        }
+        
+        .character-animation {
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .process-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .process-step {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            width: 180px;
+            margin: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--primary);
+        }
+        
+        .process-step-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .process-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0 1rem;
+        }
+        
+        .hierarchical-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .hierarchical-level {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .level-label {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-right: 1rem;
+            min-width: 120px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .level-label-en {
+            font-size: 0.8em;
+            opacity: 0.9;
+            display: block;
+        }
+        
+        .level-content {
+            background-color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+        
+        .level-content-en {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .bilingual-text {
+            margin-bottom: 1rem;
+        }
+        
+        .text-en {
+            font-style: italic;
+            color: #555;
+            font-size: 0.95em;
+            margin-top: 5px;
+            padding-left: 10px;
+            border-left: 2px solid var(--accent1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+            }
+            
+            .process-diagram {
+                flex-direction: column;
+            }
+            
+            .process-arrow {
+                transform: rotate(90deg);
+                margin: 0.5rem 0;
+            }
+            
+            .language-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+        }
+        
+        .english-mode .zh {
+            opacity: 0.7;
+        }
+        
+        .english-mode .en {
+            font-weight: 600;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <button class="lang-btn active" data-lang="both">中英双语</button>
+        <button class="lang-btn" data-lang="zh">仅中文</button>
+        <button class="lang-btn" data-lang="en">English Only</button>
+    </div>
+    
+    <header>
+        <div class="header-content">
+            <div class="ecosystem-icon">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1>生态系统科学双语词汇系统</h1>
+            <p class="subtitle">Ecosystem Science Bilingual Vocabulary System</p>
+            <p class="header-description">
+                探索生命的网络、学习生态术语、理解系统间的相互作用
+                <span class="bilingual en">Explore the web of life, learn ecological terms, understand system interactions</span>
+            </p>
+            
+            <div class="learning-level">
+                <button class="level-btn active" data-level="all">全部级别 / All Levels</button>
+                <button class="level-btn" data-level="basic">初级学习 / Beginner</button>
+                <button class="level-btn" data-level="intermediate">中级学习 / Intermediate</button>
+                <button class="level-btn" data-level="advanced">高级学习 / Advanced</button>
+            </div>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" data-tab="overview">概览 / Overview</button>
+            <button class="tab" data-tab="concepts">核心概念 / Core Concepts</button>
+            <button class="tab" data-tab="structure">系统结构 / System Structure</button>
+            <button class="tab" data-tab="functions">功能过程 / Functions & Processes</button>
+            <button class="tab" data-tab="relationships">生态关系 / Ecological Relationships</button>
+            <button class="tab" data-tab="interactive">互动学习 / Interactive Learning</button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索生态系统相关词汇 (中/英文均可)... / Search ecosystem terms (Chinese/English)...">
+        </div>
+        
+        <!-- 概览标签页 -->
+        <div id="overview" class="tab-content active">
+            <h2 class="section-title">
+                <i class="fas fa-seedling"></i>生态系统学习概览
+                <span class="section-title-en">Ecosystem Learning Overview</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>什么是生态系统？</h3>
+                <div class="bilingual-text">
+                    <p class="zh">生态系统是在特定空间内，生物群落与其非生物环境通过能量流动和物质循环互相作用、互相依存而形成的动态复合体。它是一个自我调节的功能单位。</p>
+                    <p class="en">An ecosystem is a dynamic complex formed within a specific space where biological communities and their abiotic environment interact and depend on each other through energy flow and material cycling. It is a self-regulating functional unit.</p>
+                </div>
+                
+                <div class="concept-chain">
+                    <div class="chain-item">
+                        个体 / Individual
+                        <span class="chain-item-en">Single organism</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        种群 / Population
+                        <span class="chain-item-en">Group of same species</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        群落 / Community
+                        <span class="chain-item-en">All populations in an area</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        生态系统 / Ecosystem
+                        <span class="chain-item-en">Community + environment</span>
+                    </div>
+                    <div class="chain-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="chain-item">
+                        生物圈 / Biosphere
+                        <span class="chain-item-en">All ecosystems on Earth</span>
+                    </div>
+                </div>
+                
+                <div class="hierarchical-chart">
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            生物圈
+                            <span class="level-label-en">Biosphere</span>
+                        </div>
+                        <div class="level-content">
+                            地球上所有生态系统的总和
+                            <div class="level-content-en">The sum of all ecosystems on Earth</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            生态系统
+                            <span class="level-label-en">Ecosystem</span>
+                        </div>
+                        <div class="level-content">
+                            生物群落 + 非生物环境
+                            <div class="level-content-en">Biological community + abiotic environment</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            群落
+                            <span class="level-label-en">Community</span>
+                        </div>
+                        <div class="level-content">
+                            所有生物种群的集合
+                            <div class="level-content-en">Collection of all biological populations</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            种群
+                            <span class="level-label-en">Population</span>
+                        </div>
+                        <div class="level-content">
+                            同一区域同种生物的集合
+                            <div class="level-content-en">Group of same species in an area</div>
+                        </div>
+                    </div>
+                    <div class="hierarchical-level">
+                        <div class="level-label">
+                            个体
+                            <span class="level-label-en">Individual</span>
+                        </div>
+                        <div class="level-content">
+                            单一生物有机体
+                            <div class="level-content-en">Single biological organism</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">汉字中的科学：以"生态系统"为例</h3>
+                <div class="character-breakdown">
+                    <div class="char-item">
+                        <span class="char">生</span>
+                        <span class="meaning">
+                            草木破土而出 → 生命、生物
+                            <span class="meaning-en">Plants breaking through soil → life, organisms</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">态</span>
+                        <span class="meaning">
+                            太 + 心 → 状态、形态
+                            <span class="meaning-en">"Too" + "heart" → state, form</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">系</span>
+                        <span class="meaning">
+                            丿 + 丝 → 联系、系统
+                            <span class="meaning-en">Connection, system</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">统</span>
+                        <span class="meaning">
+                            糸 + 充 → 总括、贯通
+                            <span class="meaning-en">"Thread" + "fill" → summarize, connect through</span>
+                        </span>
+                    </div>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">
+                        "生态系统"四字合义：生物及其环境通过相互联系构成的整体
+                        <span class="meaning-en">"Ecosystem": Organisms and their environment form an interconnected whole</span>
+                    </p>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-lightbulb"></i>生态系统基本特征
+                <span class="section-title-en">Basic Characteristics of Ecosystems</span>
+            </h2>
+            
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">整体性 / Wholeness</h3>
+                        <p class="card-subtitle">The property of being an integrated whole</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生态系统是一个有机整体，各组分相互关联、相互影响，整体功能大于各部分之和。</p>
+                            <p class="en">An ecosystem is an organic whole where components are interconnected and influence each other, with the whole being greater than the sum of its parts.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-project-diagram icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    移除一个关键物种可能导致整个食物网崩溃
+                                    <span class="term-en">Removing a keystone species can cause the entire food web to collapse</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">动态性 / Dynamism</h3>
+                        <p class="card-subtitle">The property of constant change and development</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生态系统随时间不断变化，经历发育、成熟、衰退等阶段，并具有昼夜和季节节律。</p>
+                            <p class="en">Ecosystems constantly change over time, going through developmental, mature, and declining stages, with diurnal and seasonal rhythms.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-sync-alt icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    森林演替从裸地到顶级群落的过程
+                                    <span class="term-en">Forest succession from bare land to climax community</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">自我调节 / Self-regulation</h3>
+                        <p class="card-subtitle">The ability to maintain stability through feedback mechanisms</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="bilingual-text">
+                            <p class="zh">生态系统通过负反馈机制抵抗干扰、维持稳定状态（生态平衡）。</p>
+                            <p class="en">Ecosystems resist disturbances and maintain stable states (ecological balance) through negative feedback mechanisms.</p>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-balance-scale icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">示例 / Example:</span>
+                                <div class="term-value">
+                                    捕食者与猎物数量的周期性波动
+                                    <span class="term-en">Cyclical fluctuations in predator and prey populations</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心概念标签页 -->
+        <div id="concepts" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-brain"></i>核心概念与术语
+                <span class="section-title-en">Core Concepts & Terminology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 生态系统 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生态系统</h3>
+                        <p class="card-subtitle">Ecosystem</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    草木生长 → 生命
+                                    <span class="meaning-en">Plants growing → life</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">态</span>
+                                <span class="meaning">
+                                    太 + 心 → 状态
+                                    <span class="meaning-en">State, condition</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">系</span>
+                                <span class="meaning">
+                                    联系、系统
+                                    <span class="meaning-en">Connection, system</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">统</span>
+                                <span class="meaning">
+                                    总括、贯通
+                                    <span class="meaning-en">Summarize, connect through</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-network-wired icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng tài xì tǒng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    在特定空间内，生物群落与其非生物环境通过能量流动和物质循环互相作用、互相依存而形成的动态复合体
+                                    <span class="term-en">A dynamic complex formed within a specific space where biological communities and their abiotic environment interact and depend on each other through energy flow and material cycling</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    A biological community of interacting organisms and their physical environment
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生物多样性 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生物多样性</h3>
+                        <p class="card-subtitle">Biodiversity</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">多</span>
+                                <span class="meaning">
+                                    夕 + 夕 → 数量大
+                                    <span class="meaning-en">Many, numerous</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">样</span>
+                                <span class="meaning">
+                                    木 + 羊 → 式样、种类
+                                    <span class="meaning-en">Pattern, type, variety</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">性</span>
+                                <span class="meaning">
+                                    忄 + 生 → 性质
+                                    <span class="meaning-en">Nature, property</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-fish icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng wù duō yàng xìng
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    生命形式在基因、物种和生态系统层面的丰富程度
+                                    <span class="term-en">The richness of life forms at genetic, species, and ecosystem levels</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    The variety of life in all its forms, levels and combinations
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">三个层次 / Three Levels:</span>
+                                <div class="term-value">
+                                    基因多样性、物种多样性、生态系统多样性
+                                    <span class="term-en">Genetic diversity, species diversity, ecosystem diversity</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生态位 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生态位</h3>
+                        <p class="card-subtitle">Ecological Niche</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">位</span>
+                                <span class="meaning">
+                                    人 + 立 → 位置、角色
+                                    <span class="meaning-en">Position, role</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-user-tie icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng tài wèi
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    一个物种在生态系统中的功能地位及其与环境条件的关系总和
+                                    <span class="term-en">The functional position of a species in an ecosystem and the sum of its relationships with environmental conditions</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">英文释义 / English Explanation:</span>
+                                <div class="term-value">
+                                    The role and position a species has in its environment
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">比喻 / Analogy:</span>
+                                <div class="term-value">
+                                    物种的"职业"（生态位）vs."住址"（栖息地）
+                                    <span class="term-en">Species' "occupation" (niche) vs. "address" (habitat)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-sitemap"></i>生态学组织层次
+                <span class="section-title-en">Ecological Organization Levels</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <div class="process-diagram">
+                    <div class="process-step">
+                        <h4>个体 / Individual</h4>
+                        <p class="process-step-en">Single organism</p>
+                        <p>单一生物有机体</p>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="process-step">
+                        <h4>种群 / Population</h4>
+                        <p class="process-step-en">Group of same species</p>
+                        <p>同种生物的集合</p>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="process-step">
+                        <h4>群落 / Community</h4>
+                        <p class="process-step-en">All populations in an area</p>
+                        <p>所有种群的集合</p>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="process-step">
+                        <h4>生态系统 / Ecosystem</h4>
+                        <p class="process-step-en">Community + environment</p>
+                        <p>生物群落+环境</p>
+                    </div>
+                    <div class="process-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="process-step">
+                        <h4>生物圈 / Biosphere</h4>
+                        <p class="process-step-en">Global ecosystem sum</p>
+                        <p>全球生态系统总和</p>
+                    </div>
+                </div>
+                <div class="bilingual-text">
+                    <p class="zh">从微观到宏观，生态学研究生命在不同尺度上的组织与功能</p>
+                    <p class="en">From micro to macro, ecology studies the organization and function of life at different scales</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 系统结构标签页 -->
+        <div id="structure" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-cubes"></i>生态系统结构与组成
+                <span class="section-title-en">Ecosystem Structure & Components</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>生态系统两大组成成分</h3>
+                <div class="bilingual-text">
+                    <p class="zh">生态系统由生物成分（生命部分）和非生物成分（非生命部分）组成，两者通过能量流动和物质循环相互作用。</p>
+                    <p class="en">Ecosystems consist of biotic components (living parts) and abiotic components (non-living parts), which interact through energy flow and material cycling.</p>
+                </div>
+                
+                <div class="ecosystem-map">
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon-small">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h4>生物成分</h4>
+                        <p>Biotic Components</p>
+                        <div class="bilingual-text">
+                            <p class="zh">生态系统中的生命部分</p>
+                            <p class="en">The living parts of an ecosystem</p>
+                        </div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon-small">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h4>非生物成分</h4>
+                        <p>Abiotic Components</p>
+                        <div class="bilingual-text">
+                            <p class="zh">生态系统中的非生命部分</p>
+                            <p class="en">The non-living parts of an ecosystem</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">
+                <i class="fas fa-users"></i>生物成分：营养结构
+                <span class="section-title-en">Biotic Components: Trophic Structure</span>
+            </h3>
+            
+            <div class="cards-container">
+                <!-- 生产者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">生产者 / Producer</h3>
+                        <p class="card-subtitle">Autotroph / Primary Producer</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">产</span>
+                                <span class="meaning">
+                                    立 + 厂 + 生 → 生出
+                                    <span class="meaning-en">Produce, generate</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">者</span>
+                                <span class="meaning">
+                                    ...的人/物
+                                    <span class="meaning-en">Person/thing that does something</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-sun icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    shēng chǎn zhě
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    能利用无机物制造有机物的自养生物，主要是绿色植物
+                                    <span class="term-en">Autotrophic organisms that can produce organic matter from inorganic substances, mainly green plants</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">功能 / Function:</span>
+                                <div class="term-value">
+                                    将太阳能转化为化学能，是生态系统的能量基石
+                                    <span class="term-en">Convert solar energy into chemical energy, forming the energy foundation of ecosystems</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    树木、草类、藻类、光合细菌
+                                    <span class="term-en">Trees, grasses, algae, photosynthetic bacteria</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 消费者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">消费者 / Consumer</h3>
+                        <p class="card-subtitle">Heterotroph</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">消</span>
+                                <span class="meaning">
+                                    水 + 肖 → 消解
+                                    <span class="meaning-en">Dissolve, consume</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">费</span>
+                                <span class="meaning">
+                                    弗 + 贝 → 耗费
+                                    <span class="meaning-en">Expend, use up</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-utensils icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    xiāo fèi zhě
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    依赖其他生物为食的异养生物
+                                    <span class="term-en">Heterotrophic organisms that depend on other organisms for food</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">分类 / Categories:</span>
+                                <div class="term-value">
+                                    初级消费者(植食)、次级消费者(肉食)、顶级消费者
+                                    <span class="term-en">Primary consumers (herbivores), secondary consumers (carnivores), apex consumers</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    草食动物、肉食动物、杂食动物
+                                    <span class="term-en">Herbivores, carnivores, omnivores</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分解者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">分解者 / Decomposer</h3>
+                        <p class="card-subtitle">Saprotroph</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">分</span>
+                                <span class="meaning">
+                                    八 + 刀 → 分开
+                                    <span class="meaning-en">Separate, divide</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">解</span>
+                                <span class="meaning">
+                                    角 + 刀 + 牛 → 分解
+                                    <span class="meaning-en">Decompose, break down</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-recycle icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">拼音 / Pinyin:</span>
+                                <div class="term-value">
+                                    fēn jiě zhě
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">定义 / Definition:</span>
+                                <div class="term-value">
+                                    将动植物残体、排泄物等有机物分解为无机物的异养生物
+                                    <span class="term-en">Heterotrophic organisms that break down organic matter like dead plants/animals and waste into inorganic substances</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">功能 / Function:</span>
+                                <div class="term-value">
+                                    完成物质循环，将养分归还环境
+                                    <span class="term-en">Complete material cycles, returning nutrients to the environment</span>
+                                </div>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">示例 / Examples:</span>
+                                <div class="term-value">
+                                    细菌、真菌、部分土壤动物
+                                    <span class="term-en">Bacteria, fungi, some soil animals</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 互动学习标签页 -->
+        <div id="interactive" class="tab-content">
+            <h2 class="section-title">
+                <i class="fas fa-gamepad"></i>互动学习与测验
+                <span class="section-title-en">Interactive Learning & Quizzes</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>测验1：生态系统基本概念</h3>
+                <p class="quiz-question">
+                    "生态系统"一词中的"系统"二字主要强调什么？
+                    <span class="quiz-question-en">What does the "system" in "ecosystem" primarily emphasize?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 生态问题的严重性
+                        <span class="term-en">A. The severity of ecological problems</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        B. 各组分相互联系构成的有机整体
+                        <span class="term-en">B. An organic whole formed by interconnected components</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        C. 生态保护的系统工程
+                        <span class="term-en">C. The systematic engineering of ecological protection</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 生态学研究的系统性
+                        <span class="term-en">D. The systematic nature of ecological research</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：B. 各组分相互联系构成的有机整体
+                    <span class="term-en">Correct answer: B. An organic whole formed by interconnected components</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析："系统"强调生态系统不是生物与环境的简单集合，而是通过能量流动和物质循环相互联系、相互依存的有机整体。
+                        <span class="term-en">Explanation: "System" emphasizes that an ecosystem is not just a simple collection of organisms and environment, but an organic whole interconnected and interdependent through energy flow and material cycling.</span>
+                    </p>
+                </div>
+                
+                <div class="result incorrect">
+                    <i class="fas fa-times-circle"></i> 回答错误，请再试一次！
+                    <span class="term-en">Incorrect answer, please try again!</span>
+                </div>
+                
+                <button id="checkAnswer1" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+                <button id="resetQuiz1" style="background-color: #ccc; color: #333; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem; margin-left: 1rem;">
+                    重置 / Reset
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>测验2：食物链与营养级</h3>
+                <p class="quiz-question">
+                    在"草 → 蝗虫 → 青蛙 → 蛇 → 鹰"这条食物链中，蛇属于第几营养级？
+                    <span class="quiz-question-en">In the food chain "grass → grasshopper → frog → snake → eagle", which trophic level does the snake belong to?</span>
+                </p>
+                
+                <div class="quiz-options">
+                    <div class="quiz-option" data-correct="false">
+                        A. 第二营养级
+                        <span class="term-en">A. Second trophic level</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        B. 第三营养级
+                        <span class="term-en">B. Third trophic level</span>
+                    </div>
+                    <div class="quiz-option" data-correct="true">
+                        C. 第四营养级
+                        <span class="term-en">C. Fourth trophic level</span>
+                    </div>
+                    <div class="quiz-option" data-correct="false">
+                        D. 第五营养级
+                        <span class="term-en">D. Fifth trophic level</span>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 正确答案：C. 第四营养级
+                    <span class="term-en">Correct answer: C. Fourth trophic level</span>
+                    <p style="margin-top: 0.5rem;">
+                        解析：草(生产者，第一营养级) → 蝗虫(初级消费者，第二营养级) → 青蛙(次级消费者，第三营养级) → 蛇(三级消费者，第四营养级) → 鹰(四级消费者，第五营养级)。
+                        <span class="term-en">Explanation: Grass (producer, 1st trophic level) → grasshopper (primary consumer, 2nd trophic level) → frog (secondary consumer, 3rd trophic level) → snake (tertiary consumer, 4th trophic level) → eagle (quaternary consumer, 5th trophic level).</span>
+                    </p>
+                </div>
+                
+                <button id="checkAnswer2" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查答案 / Check Answer
+                </button>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>学习挑战：生态系统拼图</h3>
+                <div class="bilingual-text">
+                    <p class="zh">将以下术语与正确的定义匹配：</p>
+                    <p class="en">Match the following terms with their correct definitions:</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background-color: #f0f7f5; padding: 1rem; border-radius: 8px;">
+                        <p><strong>1. 生态位 / Ecological Niche</strong></p>
+                        <p><strong>2. 生物多样性 / Biodiversity</strong></p>
+                        <p><strong>3. 演替 / Succession</strong></p>
+                    </div>
+                    
+                    <div>
+                        <div class="quiz-option match-option" data-match="3">
+                            A. 群落随时间有规律地更替过程
+                            <span class="term-en">A. The regular replacement process of communities over time</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="1">
+                            B. 物种在生态系统中的功能地位和角色
+                            <span class="term-en">B. The functional position and role of a species in an ecosystem</span>
+                        </div>
+                        <div class="quiz-option match-option" data-match="2">
+                            C. 生命形式在基因、物种和生态系统层面的丰富程度
+                            <span class="term-en">C. The richness of life forms at genetic, species, and ecosystem levels</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result correct">
+                    <i class="fas fa-check-circle"></i> 匹配正确！
+                    <span class="term-en">Matching correct!</span>
+                    <p style="margin-top: 0.5rem;">
+                        1-B, 2-C, 3-A
+                    </p>
+                </div>
+                
+                <button id="checkMatch" style="background-color: var(--primary); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem; margin-top: 1rem;">
+                    检查匹配 / Check Matching
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>生态系统科学双语学习系统 © 2023</p>
+            <p>设计理念：理解生命的网络，掌握系统的思维</p>
+            <p class="bilingual en">Design philosophy: Understand the web of life, master systems thinking</p>
+            <p>适合各年龄段学习者 | 联系我们：learning@ecosystem-science.org</p>
+            <p class="bilingual en">Suitable for learners of all ages | Contact us: learning@ecosystem-science.org</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-leaf"></i> 万物互联，生生不息
+                <span class="bilingual en">All things are interconnected, life perpetuates endlessly</span>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // 语言切换功能
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const lang = btn.getAttribute('data-lang');
+                
+                // 移除现有的语言模式类
+                document.body.classList.remove('english-mode');
+                
+                // 显示/隐藏相应的语言内容
+                const chineseElements = document.querySelectorAll('.zh');
+                const englishElements = document.querySelectorAll('.en');
+                
+                if (lang === 'zh') {
+                    // 只显示中文
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'none');
+                } else if (lang === 'en') {
+                    // 只显示英文
+                    chineseElements.forEach(el => el.style.display = 'none');
+                    englishElements.forEach(el => el.style.display = 'block');
+                    document.body.classList.add('english-mode');
+                } else {
+                    // 显示双语
+                    chineseElements.forEach(el => el.style.display = 'block');
+                    englishElements.forEach(el => el.style.display = 'block');
+                }
+            });
+        });
+        
+        // 标签页切换功能
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // 隐藏所有内容
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // 激活当前标签
+                tab.classList.add('active');
+                // 显示对应内容
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // 学习级别切换
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const level = btn.getAttribute('data-level');
+                // 根据级别筛选内容
+                filterByLevel(level);
+            });
+        });
+        
+        function filterByLevel(level) {
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .ecosystem-map');
+            
+            if (level === 'all') {
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'basic') {
+                // 基础级别显示核心概念和简单内容
+                cards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent;
+                    const basicTerms = ['生态系统', '生物多样性', '生产者', '消费者', '分解者', '食物链'];
+                    const basicTermsEn = ['Ecosystem', 'Biodiversity', 'Producer', 'Consumer', 'Decomposer', 'Food Chain'];
+                    
+                    let shouldShow = false;
+                    for (let term of basicTerms) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    for (let term of basicTermsEn) {
+                        if (title.includes(term)) {
+                            shouldShow = true;
+                            break;
+                        }
+                    }
+                    
+                    if (shouldShow) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                // 显示所有互动部分
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'intermediate') {
+                // 中级级别显示更多内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            } else if (level === 'advanced') {
+                // 高级级别显示所有内容
+                cards.forEach(card => card.style.display = 'flex');
+                sections.forEach(section => section.style.display = 'block');
+            }
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            const sections = document.querySelectorAll('.interactive-section, .ecosystem-item');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    card.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                    section.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        section.style.animation = '';
+                    }, 500);
+                }
+            });
+        });
+        
+        // 测验1逻辑
+        const checkAnswer1Btn = document.getElementById('checkAnswer1');
+        const resetQuiz1Btn = document.getElementById('resetQuiz1');
+        const quizOptions1 = document.querySelectorAll('#interactive .interactive-section:first-child .quiz-option');
+        const resultCorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.correct');
+        const resultIncorrect1 = document.querySelector('#interactive .interactive-section:first-child .result.incorrect');
+        
+        checkAnswer1Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions1.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect1.style.display = 'block';
+                resultIncorrect1.style.display = 'none';
+            } else {
+                resultCorrect1.style.display = 'none';
+                resultIncorrect1.style.display = 'block';
+            }
+        });
+        
+        resetQuiz1Btn.addEventListener('click', () => {
+            quizOptions1.forEach(option => {
+                option.classList.remove('selected');
+                option.classList.remove('correct');
+                option.classList.remove('incorrect');
+            });
+            resultCorrect1.style.display = 'none';
+            resultIncorrect1.style.display = 'none';
+        });
+        
+        quizOptions1.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions1.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+                
+                if (option.getAttribute('data-correct') === 'true') {
+                    option.classList.add('correct');
+                } else {
+                    option.classList.add('incorrect');
+                }
+            });
+        });
+        
+        // 测验2逻辑
+        const checkAnswer2Btn = document.getElementById('checkAnswer2');
+        const quizOptions2 = document.querySelectorAll('#interactive .interactive-section:nth-child(2) .quiz-option');
+        const resultCorrect2 = document.querySelector('#interactive .interactive-section:nth-child(2) .result.correct');
+        
+        checkAnswer2Btn.addEventListener('click', () => {
+            let answered = false;
+            let correct = false;
+            
+            quizOptions2.forEach(option => {
+                if (option.classList.contains('selected')) {
+                    answered = true;
+                    if (option.getAttribute('data-correct') === 'true') {
+                        correct = true;
+                    }
+                }
+            });
+            
+            if (!answered) {
+                alert('请选择一个答案！ / Please select an answer!');
+                return;
+            }
+            
+            if (correct) {
+                resultCorrect2.style.display = 'block';
+            } else {
+                alert('回答错误，请再试一次！ / Incorrect answer, please try again!');
+            }
+        });
+        
+        quizOptions2.forEach(option => {
+            option.addEventListener('click', () => {
+                quizOptions2.forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.classList.remove('correct');
+                    opt.classList.remove('incorrect');
+                });
+                
+                option.classList.add('selected');
+            });
+        });
+        
+        // 匹配测验逻辑
+        const matchOptions = document.querySelectorAll('.match-option');
+        const checkMatchBtn = document.getElementById('checkMatch');
+        const resultCorrect3 = document.querySelector('#interactive .interactive-section:nth-child(3) .result.correct');
+        
+        checkMatchBtn.addEventListener('click', () => {
+            // 简单验证：检查是否所有选项都被选中
+            let allSelected = true;
+            matchOptions.forEach(option => {
+                if (!option.classList.contains('selected')) {
+                    allSelected = false;
+                }
+            });
+            
+            if (!allSelected) {
+                alert('请将左右两边的项目全部匹配！ / Please match all items on both sides!');
+                return;
+            }
+            
+            // 显示结果
+            resultCorrect3.style.display = 'block';
+        });
+        
+        matchOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (option.classList.contains('selected')) {
+                    option.classList.remove('selected');
+                } else {
+                    option.classList.add('selected');
+                }
+            });
+        });
+        
+        // 页面加载后默认显示概览
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('overview').classList.add('active');
+            
+            // 初始化所有英文描述默认显示
+            const englishElements = document.querySelectorAll('.en');
+            englishElements.forEach(el => el.style.display = 'block');
+        });
+    </script>
+</body>
+</html>

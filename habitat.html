@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>栖息地科学双语词汇学习系统 | Habitat Science Bilingual Vocabulary System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c7873;
+            --secondary: #6fb3b8;
+            --light: #f7f9f9;
+            --dark: #004445;
+            --accent1: #ff9a3c;
+            --accent2: #a3de83;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* 语言切换器样式 */
+        .language-switcher {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+        
+        .lang-btn {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .lang-btn:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .lang-btn.active {
+            background-color: var(--accent1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 语言特定显示控制 */
+        .lang-zh, .lang-en {
+            display: inline;
+        }
+        
+        /* 仅中文模式 */
+        body.lang-zh-only .lang-en:not(.always-show) {
+            display: none !important;
+        }
+        
+        /* 仅英文模式 */
+        body.lang-en-only .lang-zh:not(.always-show) {
+            display: none !important;
+        }
+        
+        /* 双语模式 - 默认 */
+        body.lang-bilingual .lang-en {
+            display: inline;
+        }
+        body.lang-bilingual .lang-zh {
+            display: inline;
+        }
+        
+        /* 特殊类用于保持某些元素始终显示 */
+        .always-show {
+            display: inline !important;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .habitat-icon {
+            font-size: 3rem;
+            color: var(--accent2);
+            margin-bottom: 1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tab {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .tab:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            background-color: var(--accent1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            color: var(--dark);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.2rem;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .card-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .character-breakdown {
+            background-color: #f9fdfc;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .char-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .char {
+            font-weight: bold;
+            color: var(--dark);
+            min-width: 24px;
+            text-align: center;
+            margin-right: 8px;
+            background-color: #e6f2f1;
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+        
+        .meaning {
+            color: #555;
+        }
+        
+        .visual-aid {
+            height: 120px;
+            background-color: #e9f5f4;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .habitat-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .icon-placeholder {
+            font-size: 3rem;
+            color: var(--secondary);
+        }
+        
+        .term-details {
+            margin-top: 1rem;
+        }
+        
+        .term-row {
+            display: flex;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .term-label {
+            font-weight: 600;
+            min-width: 100px;
+            color: var(--primary);
+        }
+        
+        .search-container {
+            margin: 2rem 0;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            transition: border 0.3s;
+        }
+        
+        #searchInput:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .interactive-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-switcher {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .quiz-option {
+            padding: 1rem;
+            background-color: #f0f7f7;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e6f2f1;
+        }
+        
+        .quiz-option.correct {
+            background-color: #d4edda;
+            border-color: #a3de83;
+            color: #155724;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .result.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .habitat-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .habitat-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .habitat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .habitat-icon-small {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 154, 60, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .learning-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .level-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn.active {
+            background-color: var(--accent1);
+        }
+        
+        .character-animation {
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+            }
+        }
+        
+        /* 双语分隔符样式 */
+        .lang-separator {
+            margin: 0 5px;
+            opacity: 0.7;
+        }
+        
+        .en-inline {
+            font-style: italic;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="lang-bilingual">
+    <header>
+        <div class="header-content">
+            <!-- 语言切换器 -->
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="bilingual">
+                    <span class="lang-zh">中英双语</span>
+                    <span class="lang-en">Bilingual</span>
+                </button>
+                <button class="lang-btn" data-lang="zh">
+                    <span class="lang-zh">仅中文</span>
+                    <span class="lang-en">Chinese Only</span>
+                </button>
+                <button class="lang-btn" data-lang="en">
+                    <span class="lang-zh">仅英文</span>
+                    <span class="lang-en">English Only</span>
+                </button>
+            </div>
+            
+            <div class="habitat-icon">
+                <i class="fas fa-tree"></i>
+            </div>
+            <h1>
+                <span class="lang-zh">栖息地科学双语词汇系统</span>
+                <span class="lang-en">Habitat Science Bilingual Vocabulary System</span>
+            </h1>
+            <p class="subtitle">
+                <span class="lang-zh">探索生态系统、学习专业术语、理解汉字中的科学智慧</span>
+                <span class="lang-en">Explore ecosystems, learn terminology, understand the science within Chinese characters</span>
+            </p>
+            
+            <div class="learning-level">
+                <button class="level-btn active" data-level="all">
+                    <span class="lang-zh">全部级别</span>
+                    <span class="lang-en">All Levels</span>
+                </button>
+                <button class="level-btn" data-level="basic">
+                    <span class="lang-zh">初级学习</span>
+                    <span class="lang-en">Basic</span>
+                </button>
+                <button class="level-btn" data-level="intermediate">
+                    <span class="lang-zh">中级学习</span>
+                    <span class="lang-en">Intermediate</span>
+                </button>
+                <button class="level-btn" data-level="advanced">
+                    <span class="lang-zh">高级学习</span>
+                    <span class="lang-en">Advanced</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="tab active" data-tab="overview">
+                <span class="lang-zh">概览</span>
+                <span class="lang-en">Overview</span>
+            </button>
+            <button class="tab" data-tab="concepts">
+                <span class="lang-zh">核心概念</span>
+                <span class="lang-en">Core Concepts</span>
+            </button>
+            <button class="tab" data-tab="types">
+                <span class="lang-zh">栖息地类型</span>
+                <span class="lang-en">Habitat Types</span>
+            </button>
+            <button class="tab" data-tab="components">
+                <span class="lang-zh">构成要素</span>
+                <span class="lang-en">Components</span>
+            </button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="搜索栖息地相关词汇 (中/英文均可)...">
+        </div>
+        
+        <!-- 概览标签页 -->
+        <div id="overview" class="tab-content active">
+            <h2 class="section-title">
+                <i class="fas fa-home"></i>
+                <span class="lang-zh">栖息地学习概览</span>
+                <span class="lang-en">Habitat Learning Overview</span>
+            </h2>
+            <div class="interactive-section">
+                <h3>
+                    <span class="lang-zh">什么是栖息地？</span>
+                    <span class="lang-en">What is a Habitat?</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">栖息地是生物生活、觅食、繁殖和完成生命周期的特定环境区域。它不仅包括物理空间，还包括所有维持生命的要素：食物、水、庇护所和适宜的气候条件。</span>
+                    <span class="lang-en">A habitat is a specific environmental area where organisms live, forage, reproduce, and complete their life cycles. It includes not only physical space but also all life-sustaining elements: food, water, shelter, and suitable climatic conditions.</span>
+                </p>
+                
+                <div class="habitat-map">
+                    <div class="habitat-item">
+                        <div class="habitat-icon-small">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h4>
+                            <span class="lang-zh">陆地栖息地</span>
+                            <span class="lang-en">Terrestrial Habitats</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">森林、草原、沙漠等</span>
+                            <span class="lang-en">Forests, grasslands, deserts, etc.</span>
+                        </p>
+                    </div>
+                    <div class="habitat-item">
+                        <div class="habitat-icon-small">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h4>
+                            <span class="lang-zh">水域栖息地</span>
+                            <span class="lang-en">Aquatic Habitats</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">海洋、河流、湿地等</span>
+                            <span class="lang-en">Oceans, rivers, wetlands, etc.</span>
+                        </p>
+                    </div>
+                    <div class="habitat-item">
+                        <div class="habitat-icon-small">
+                            <i class="fas fa-city"></i>
+                        </div>
+                        <h4>
+                            <span class="lang-zh">人工栖息地</span>
+                            <span class="lang-en">Artificial Habitats</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">城市、农田等</span>
+                            <span class="lang-en">Urban areas, farmlands, etc.</span>
+                        </p>
+                    </div>
+                    <div class="habitat-item">
+                        <div class="habitat-icon-small">
+                            <i class="fas fa-snowflake"></i>
+                        </div>
+                        <h4>
+                            <span class="lang-zh">特殊栖息地</span>
+                            <span class="lang-en">Special Habitats</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">极地、洞穴等</span>
+                            <span class="lang-en">Polar regions, caves, etc.</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 2rem;">
+                    <span class="lang-zh">汉字中的科学：以"栖息地"为例</span>
+                    <span class="lang-en">Science in Chinese Characters: "栖息地" as an Example</span>
+                </h3>
+                <div class="character-breakdown">
+                    <div class="char-item">
+                        <span class="char">栖</span>
+                        <span class="meaning">
+                            <span class="lang-zh">木 + 西 = 鸟在树上休息（太阳西下，鸟归巢）</span>
+                            <span class="lang-en">木 (wood) + 西 (west) = birds resting in trees (sun sets in the west, birds return to nest)</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">息</span>
+                        <span class="meaning">
+                            <span class="lang-zh">自 + 心 = 呼吸、休息（鼻子和心脏，代表生命活动）</span>
+                            <span class="lang-en">自 (self/nose) + 心 (heart) = breathing, resting (nose and heart represent life activities)</span>
+                        </span>
+                    </div>
+                    <div class="char-item">
+                        <span class="char">地</span>
+                        <span class="meaning">
+                            <span class="lang-zh">土 + 也 = 土地、地方（承载万物的空间）</span>
+                            <span class="lang-en">土 (earth) + 也 (also) = land, place (space that carries all things)</span>
+                        </span>
+                    </div>
+                    <p style="margin-top: 1rem; font-weight: 600; color: var(--primary);">
+                        <span class="lang-zh">"栖息地"三字合义：生物在适宜环境中停留休息的地方</span>
+                        <span class="lang-en">Combined meaning of "栖息地": A place where organisms stay and rest in a suitable environment</span>
+                    </p>
+                </div>
+            </div>
+            
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i>
+                <span class="lang-zh">学习建议</span>
+                <span class="lang-en">Learning Suggestions</span>
+            </h2>
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">初学者</span>
+                            <span class="lang-en">Beginners</span>
+                        </h3>
+                        <p class="card-subtitle">
+                            <span class="lang-zh">(小学生及入门者)</span>
+                            <span class="lang-en">(Primary students & beginners)</span>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <span class="lang-zh">1. 从"栖息地类型"开始，通过图片认识不同环境</span>
+                            <span class="lang-en">1. Start with "Habitat Types" to recognize different environments through images</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">2. 学习核心概念，理解基本术语</span>
+                            <span class="lang-en">2. Learn core concepts and understand basic terminology</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">3. 参与互动测验，巩固记忆</span>
+                            <span class="lang-en">3. Participate in interactive quizzes to reinforce memory</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">4. 观察汉字结构，理解造字逻辑</span>
+                            <span class="lang-en">4. Observe Chinese character structures to understand character formation logic</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">中级学习者</span>
+                            <span class="lang-en">Intermediate Learners</span>
+                        </h3>
+                        <p class="card-subtitle">
+                            <span class="lang-zh">(中学生及爱好者)</span>
+                            <span class="lang-en">(Secondary students & enthusiasts)</span>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <span class="lang-zh">1. 深入研究构成要素与生态关系</span>
+                            <span class="lang-en">1. Deeply study components and ecological relationships</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">2. 掌握双语术语，尝试用英文解释概念</span>
+                            <span class="lang-en">2. Master bilingual terminology, try explaining concepts in English</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">3. 理解栖息地动态变化与保护</span>
+                            <span class="lang-en">3. Understand habitat dynamics and conservation</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">4. 分析专业术语中的汉字智慧</span>
+                            <span class="lang-en">4. Analyze the wisdom in Chinese characters within professional terminology</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">高级学习者</span>
+                            <span class="lang-en">Advanced Learners</span>
+                        </h3>
+                        <p class="card-subtitle">
+                            <span class="lang-zh">(大学生及专业人士)</span>
+                            <span class="lang-en">(University students & professionals)</span>
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <span class="lang-zh">1. 掌握前沿术语与复杂概念</span>
+                            <span class="lang-en">1. Master advanced terminology and complex concepts</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">2. 分析栖息地变化与生态保护策略</span>
+                            <span class="lang-en">2. Analyze habitat changes and ecological conservation strategies</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">3. 研究汉字结构与科学概念的深层次联系</span>
+                            <span class="lang-en">3. Research deep connections between Chinese character structures and scientific concepts</span>
+                        </p>
+                        <p>
+                            <span class="lang-zh">4. 运用知识分析现实生态问题</span>
+                            <span class="lang-en">4. Apply knowledge to analyze real ecological problems</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 核心概念标签页 -->
+        <div id="concepts" class="tab-content">
+            <h2 class="section-title"><i class="fas fa-brain"></i>
+                <span class="lang-zh">核心概念与术语</span>
+                <span class="lang-en">Core Concepts & Terminology</span>
+            </h2>
+            
+            <div class="cards-container">
+                <!-- 栖息地 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">栖息地</span>
+                            <span class="lang-en">Habitat</span>
+                        </h3>
+                        <p class="card-subtitle">Habitat</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">栖</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">木 + 西：太阳西下，鸟归巢休息</span>
+                                    <span class="lang-en">木 (wood) + 西 (west): Sun sets in the west, birds return to nest and rest</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">息</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">自 + 心：呼吸、生命活动</span>
+                                    <span class="lang-en">自 (self/nose) + 心 (heart): Breathing, life activities</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">地</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">土 + 也：承载万物的空间</span>
+                                    <span class="lang-en">土 (earth) + 也 (also): Space that carries all things</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-dove icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>qī xī dì</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生物生存与繁衍的特定物理空间与环境总和</span>
+                                    <span class="lang-en">The specific physical space and environmental totality where organisms survive and reproduce</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">英文释义：</span>
+                                    <span class="lang-en">English Definition:</span>
+                                </span>
+                                <span>The specific environment where an organism lives, including all biotic and abiotic factors.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生态系统 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">生态系统</span>
+                            <span class="lang-en">Ecosystem</span>
+                        </h3>
+                        <p class="card-subtitle">Ecosystem</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">草木生长</span>
+                                    <span class="lang-en">Growth of plants</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">态</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">太 + 心：状态、形态</span>
+                                    <span class="lang-en">太 (great) + 心 (heart): State, form</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">系</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">丿 + 丝：联系、系统</span>
+                                    <span class="lang-en">丿 + 丝 (silk): Connection, system</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">统</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">糸 + 充：总括、贯通</span>
+                                    <span class="lang-en">糸 (thread) + 充 (fill): Summarize, penetrate</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-project-diagram icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shēng tài xì tǒng</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生物群落与非生物环境相互作用的动态复合体</span>
+                                    <span class="lang-en">A dynamic complex of interacting biological communities and abiotic environments</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">英文释义：</span>
+                                    <span class="lang-en">English Definition:</span>
+                                </span>
+                                <span>A biological community of interacting organisms and their physical environment.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生物多样性 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">生物多样性</span>
+                            <span class="lang-en">Biodiversity</span>
+                        </h3>
+                        <p class="card-subtitle">Biodiversity</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">多</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">夕 + 夕：数量大</span>
+                                    <span class="lang-en">夕 (evening) + 夕: Large quantity</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">样</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">木 + 羊：式样、种类</span>
+                                    <span class="lang-en">木 (wood) + 羊 (sheep): Pattern, type</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-leaf icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shēng wù duō yàng xìng</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生物及其与环境形成的生态复合体以及与此相关的各种生态过程的总和</span>
+                                    <span class="lang-en">The variety of life forms and the ecological complexes they form with their environment, including related ecological processes</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">英文释义：</span>
+                                    <span class="lang-en">English Definition:</span>
+                                </span>
+                                <span>The variety of life in the world or in a particular habitat or ecosystem.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生态位 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">生态位</span>
+                            <span class="lang-en">Ecological Niche</span>
+                        </h3>
+                        <p class="card-subtitle">Ecological Niche</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">位</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">人 + 立：位置、地位</span>
+                                    <span class="lang-en">人 (person) + 立 (stand): Position, status</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-puzzle-piece icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shēng tài wèi</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">物种在生态系统中的功能角色及其与环境的相互关系</span>
+                                    <span class="lang-en">The functional role of a species in an ecosystem and its interrelationships with the environment</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">英文释义：</span>
+                                    <span class="lang-en">English Definition:</span>
+                                </span>
+                                <span>The role and position a species has in its environment, including all its interactions with biotic and abiotic factors.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 群落 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">群落</span>
+                            <span class="lang-en">Community</span>
+                        </h3>
+                        <p class="card-subtitle">Biological Community</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">群</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">君 + 羊：群体、集合</span>
+                                    <span class="lang-en">君 (ruler) + 羊 (sheep): Group, collection</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">落</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">艹 + 洛：聚集、定居</span>
+                                    <span class="lang-en">艹 (grass) + 洛 (Luo River): Gather, settle</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-users icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>qún luò</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">特定区域内相互作用的生物种群的集合</span>
+                                    <span class="lang-en">A collection of interacting populations of different species in a specific area</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">英文释义：</span>
+                                    <span class="lang-en">English Definition:</span>
+                                </span>
+                                <span>An assemblage of populations of different species living and interacting in a particular area.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title"><i class="fas fa-link"></i>
+                <span class="lang-zh">概念关系图</span>
+                <span class="lang-en">Concept Relationship Diagram</span>
+            </h2>
+            <div class="interactive-section">
+                <p>
+                    <span class="lang-zh">理解这些核心概念之间的关系对于掌握生态学至关重要：</span>
+                    <span class="lang-en">Understanding the relationships between these core concepts is crucial for mastering ecology:</span>
+                </p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <div style="display: inline-block; text-align: left;">
+                        <p><span class="highlight">
+                            <span class="lang-zh">栖息地</span>
+                            <span class="lang-en">Habitat</span>
+                        </span> <span class="lang-zh">是</span><span class="lang-en"> is the spatial carrier of </span> <span class="highlight">
+                            <span class="lang-zh">生态系统</span>
+                            <span class="lang-en">Ecosystem</span>
+                        </span></p>
+                        <p><span class="highlight">
+                            <span class="lang-zh">生态系统</span>
+                            <span class="lang-en">Ecosystem</span>
+                        </span> <span class="lang-zh">包含</span><span class="lang-en"> contains </span> <span class="highlight">
+                            <span class="lang-zh">生物群落</span>
+                            <span class="lang-en">Biological Community</span>
+                        </span> <span class="lang-zh">与非生物环境</span><span class="lang-en"> and abiotic environment</span></p>
+                        <p><span class="highlight">
+                            <span class="lang-zh">生物群落</span>
+                            <span class="lang-en">Biological Community</span>
+                        </span> <span class="lang-zh">的丰富程度构成了</span><span class="lang-en"> richness constitutes </span> <span class="highlight">
+                            <span class="lang-zh">生物多样性</span>
+                            <span class="lang-en">Biodiversity</span>
+                        </span></p>
+                        <p><span class="highlight">
+                            <span class="lang-zh">生态位</span>
+                            <span class="lang-en">Ecological Niche</span>
+                        </span> <span class="lang-zh">是物种在</span><span class="lang-en"> is the functional position of species in </span> <span class="highlight">
+                            <span class="lang-zh">生态系统</span>
+                            <span class="lang-en">Ecosystem</span>
+                        </span> <span class="lang-zh">中的功能位置</span><span class="lang-en"></span></p>
+                    </div>
+                </div>
+                <p style="margin-top: 1.5rem;">
+                    <span class="lang-zh">这种层级关系体现了从局部到整体、从静态到动态的生态学思维方式。</span>
+                    <span class="lang-en">This hierarchical relationship reflects the ecological thinking from local to whole, from static to dynamic.</span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- 栖息地类型标签页 -->
+        <div id="types" class="tab-content">
+            <h2 class="section-title"><i class="fas fa-globe-americas"></i>
+                <span class="lang-zh">栖息地类型分类</span>
+                <span class="lang-en">Habitat Type Classification</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>
+                    <span class="lang-zh">栖息地分类体系</span>
+                    <span class="lang-en">Habitat Classification System</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">栖息地可根据其物理环境、地理位置和生态特征进行分类。以下是最常见的分类方式：</span>
+                    <span class="lang-en">Habitats can be classified based on their physical environment, geographical location, and ecological characteristics. Below are the most common classification methods:</span>
+                </p>
+                
+                <div style="margin: 1.5rem 0; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                    <button class="tab habitat-type-btn active" data-type="all">
+                        <span class="lang-zh">全部</span>
+                        <span class="lang-en">All</span>
+                    </button>
+                    <button class="tab habitat-type-btn" data-type="terrestrial">
+                        <span class="lang-zh">陆地</span>
+                        <span class="lang-en">Terrestrial</span>
+                    </button>
+                    <button class="tab habitat-type-btn" data-type="aquatic">
+                        <span class="lang-zh">水域</span>
+                        <span class="lang-en">Aquatic</span>
+                    </button>
+                    <button class="tab habitat-type-btn" data-type="special">
+                        <span class="lang-zh">特殊</span>
+                        <span class="lang-en">Special</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cards-container" id="habitat-types-container">
+                <!-- 森林 -->
+                <div class="card habitat-card" data-type="terrestrial">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">森林</span>
+                            <span class="lang-en">Forest</span>
+                        </h3>
+                        <p class="card-subtitle">Forest</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">森</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">三"木"：极言树木之多</span>
+                                    <span class="lang-en">Three "木" (wood): Emphasizes abundance of trees</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">林</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">二"木"：成片的树木</span>
+                                    <span class="lang-en">Two "木" (wood): Groves or woods</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-tree icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>sēn lín</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">树木密集，生物多样性高，碳汇能力强</span>
+                                    <span class="lang-en">Dense trees, high biodiversity, strong carbon sequestration capacity</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">热带雨林、温带森林、寒带针叶林</span>
+                                    <span class="lang-en">Tropical rainforest, temperate forest, boreal coniferous forest</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 海洋 -->
+                <div class="card habitat-card" data-type="aquatic">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">海洋</span>
+                            <span class="lang-en">Ocean/Sea</span>
+                        </h3>
+                        <p class="card-subtitle">Ocean/Sea</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">海</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 每：容"百川"之水</span>
+                                    <span class="lang-en">水 (water) + 每 (each): Contains waters of "hundred rivers"</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">洋</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 羊：广阔水域</span>
+                                    <span class="lang-en">水 (water) + 羊 (sheep): Vast water body</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-water icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>hǎi yáng</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">覆盖地球71%面积，盐度稳定，垂直分层</span>
+                                    <span class="lang-en">Covers 71% of Earth's surface, stable salinity, vertical stratification</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">太平洋、珊瑚礁、深海热液口</span>
+                                    <span class="lang-en">Pacific Ocean, coral reefs, deep-sea hydrothermal vents</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 湿地 -->
+                <div class="card habitat-card" data-type="aquatic">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">湿地</span>
+                            <span class="lang-en">Wetland</span>
+                        </h3>
+                        <p class="card-subtitle">Wetland</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">湿</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 显：水分充沛之地</span>
+                                    <span class="lang-en">水 (water) + 显 (obvious): Land with abundant moisture</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">地</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">土 + 也：地方</span>
+                                    <span class="lang-en">土 (earth) + 也 (also): Place</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-frog icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shī dì</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">陆地与水域过渡区，水文条件独特，生物多样性丰富</span>
+                                    <span class="lang-en">Transition zone between land and water, unique hydrological conditions, rich biodiversity</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">沼泽、泥炭地、红树林</span>
+                                    <span class="lang-en">Swamps, peatlands, mangrove forests</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 沙漠 -->
+                <div class="card habitat-card" data-type="terrestrial">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">沙漠</span>
+                            <span class="lang-en">Desert</span>
+                        </h3>
+                        <p class="card-subtitle">Desert</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">沙</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 少：水边细石</span>
+                                    <span class="lang-en">水 (water) + 少 (few): Fine stones by water</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">漠</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 莫：广漠无水之地</span>
+                                    <span class="lang-en">水 (water) + 莫 (not): Vast land without water</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-sun icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shā mò</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">降水稀少，蒸发强烈，昼夜温差大</span>
+                                    <span class="lang-en">Sparse precipitation, strong evaporation, large diurnal temperature variation</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">撒哈拉沙漠、戈壁沙漠</span>
+                                    <span class="lang-en">Sahara Desert, Gobi Desert</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 草原 -->
+                <div class="card habitat-card" data-type="terrestrial">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">草原</span>
+                            <span class="lang-en">Grassland</span>
+                        </h3>
+                        <p class="card-subtitle">Grassland/Steppe</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">草</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">艹 + 早：草本植物</span>
+                                    <span class="lang-en">艹 (grass) + 早 (early): Herbaceous plants</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">原</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">厂 + 白 + 小：广阔平坦之地</span>
+                                    <span class="lang-en">厂 (cliff) + 白 (white) + 小 (small): Vast flat land</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-seedling icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>cǎo yuán</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">以草本植物为主，降雨量中等，开阔地形</span>
+                                    <span class="lang-en">Dominance of herbaceous plants, moderate rainfall, open terrain</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">北美大草原、欧亚草原、稀树草原</span>
+                                    <span class="lang-en">North American prairie, Eurasian steppe, savanna</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 珊瑚礁 -->
+                <div class="card habitat-card" data-type="aquatic">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">珊瑚礁</span>
+                            <span class="lang-en">Coral Reef</span>
+                        </h3>
+                        <p class="card-subtitle">Coral Reef</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">珊</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">玉 + 册：珊瑚，似玉之石</span>
+                                    <span class="lang-en">玉 (jade) + 册 (book): Coral, jade-like stone</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">礁</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">石 + 焦：露出水面的岩石</span>
+                                    <span class="lang-en">石 (stone) + 焦 (burned): Rocks exposed above water</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-fish icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shān hú jiāo</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">由珊瑚虫骨骼构成，海洋生物多样性热点，对水温敏感</span>
+                                    <span class="lang-en">Formed by coral polyps skeletons, marine biodiversity hotspot, sensitive to water temperature</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">大堡礁、加勒比海珊瑚礁</span>
+                                    <span class="lang-en">Great Barrier Reef, Caribbean coral reefs</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 苔原 -->
+                <div class="card habitat-card" data-type="terrestrial">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">苔原</span>
+                            <span class="lang-en">Tundra</span>
+                        </h3>
+                        <p class="card-subtitle">Tundra</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">苔</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">艹 + 台：低等植物</span>
+                                    <span class="lang-en">艹 (grass) + 台 (platform): Lower plants</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">原</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">厂 + 白 + 小：广阔平坦之地</span>
+                                    <span class="lang-en">厂 (cliff) + 白 (white) + 小 (small): Vast flat land</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-snowflake icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>tái yuán</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">永久冻土，生长季短，植被低矮</span>
+                                    <span class="lang-en">Permafrost, short growing season, low-growing vegetation</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">北极苔原、高山苔原</span>
+                                    <span class="lang-en">Arctic tundra, alpine tundra</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 红树林 -->
+                <div class="card habitat-card" data-type="aquatic">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">红树林</span>
+                            <span class="lang-en">Mangrove</span>
+                        </h3>
+                        <p class="card-subtitle">Mangrove Forest</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">红</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">纟 + 工：红色</span>
+                                    <span class="lang-en">纟 (silk) + 工 (work): Red color</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">树</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">木 + 对：木本植物</span>
+                                    <span class="lang-en">木 (wood) + 对 (pair): Woody plant</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-tree icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>hóng shù lín</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特征：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">海岸带盐生木本植物群落，适应潮间带环境，重要碳汇</span>
+                                    <span class="lang-en">Coastal salt-tolerant woody plant communities, adapted to intertidal environment, important carbon sink</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">东南亚红树林、佛罗里达红树林</span>
+                                    <span class="lang-en">Southeast Asian mangroves, Florida mangroves</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 构成要素标签页 -->
+        <div id="components" class="tab-content">
+            <h2 class="section-title"><i class="fas fa-puzzle-piece"></i>
+                <span class="lang-zh">栖息地构成要素</span>
+                <span class="lang-en">Habitat Components</span>
+            </h2>
+            
+            <div class="interactive-section">
+                <h3>
+                    <span class="lang-zh">栖息地的关键要素</span>
+                    <span class="lang-en">Key Components of Habitats</span>
+                </h3>
+                <p>
+                    <span class="lang-zh">栖息地由生物因子和非生物因子共同构成，这些要素相互作用形成独特的生态特征：</span>
+                    <span class="lang-en">Habitats consist of biotic and abiotic factors that interact to form unique ecological characteristics:</span>
+                </p>
+            </div>
+            
+            <div class="cards-container">
+                <!-- 生物因子 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">生物因子</span>
+                            <span class="lang-en">Biotic Factors</span>
+                        </h3>
+                        <p class="card-subtitle">Biotic Components</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">草木生长</span>
+                                    <span class="lang-en">Growth of plants</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">牛 + 勿：万物</span>
+                                    <span class="lang-en">牛 (cow) + 勿 (not): All things</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-leaf icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shēng wù yīn zǐ</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生态系统中所有生物成分及其相互作用</span>
+                                    <span class="lang-en">All biological components and their interactions in an ecosystem</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">包含：</span>
+                                    <span class="lang-en">Includes:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生产者、消费者、分解者</span>
+                                    <span class="lang-en">Producers, consumers, decomposers</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">作用：</span>
+                                    <span class="lang-en">Function:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">能量流动、物质循环、信息传递</span>
+                                    <span class="lang-en">Energy flow, material cycling, information transmission</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 非生物因子 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">非生物因子</span>
+                            <span class="lang-en">Abiotic Factors</span>
+                        </h3>
+                        <p class="card-subtitle">Abiotic Components</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">非</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">不是、否定</span>
+                                    <span class="lang-en">Not, negation</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">草木生长</span>
+                                    <span class="lang-en">Growth of plants</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">牛 + 勿：万物</span>
+                                    <span class="lang-en">牛 (cow) + 勿 (not): All things</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-sun icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>fēi shēng wù yīn zǐ</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生态系统中非生命的物理和化学要素</span>
+                                    <span class="lang-en">Non-living physical and chemical elements in an ecosystem</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">包含：</span>
+                                    <span class="lang-en">Includes:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">光照、温度、水、土壤、空气</span>
+                                    <span class="lang-en">Light, temperature, water, soil, air</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">作用：</span>
+                                    <span class="lang-en">Function:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">决定生物分布、影响生物生理过程</span>
+                                    <span class="lang-en">Determines organism distribution, influences physiological processes</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 生产者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">生产者</span>
+                            <span class="lang-en">Producers</span>
+                        </h3>
+                        <p class="card-subtitle">Autotrophs</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">生</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">生长、产生</span>
+                                    <span class="lang-en">Grow, produce</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">产</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">立 + 厂：生产、产出</span>
+                                    <span class="lang-en">立 (stand) + 厂 (cliff): Produce, output</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">者</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">执行动作的人或物</span>
+                                    <span class="lang-en">Person or thing performing an action</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-seedling icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shēng chǎn zhě</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">通过光合作用或化能合成制造有机物的生物</span>
+                                    <span class="lang-en">Organisms that produce organic matter through photosynthesis or chemosynthesis</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">绿色植物、藻类、光合细菌</span>
+                                    <span class="lang-en">Green plants, algae, photosynthetic bacteria</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">功能：</span>
+                                    <span class="lang-en">Function:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">将太阳能转化为化学能，是食物链的基础</span>
+                                    <span class="lang-en">Convert solar energy to chemical energy, foundation of food chains</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 消费者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">消费者</span>
+                            <span class="lang-en">Consumers</span>
+                        </h3>
+                        <p class="card-subtitle">Heterotrophs</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">消</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">水 + 肖：消失、消耗</span>
+                                    <span class="lang-en">水 (water) + 肖 (resemble): Disappear, consume</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">费</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">弗 + 贝：花费、消耗</span>
+                                    <span class="lang-en">弗 (not) + 贝 (shell): Spend, consume</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">者</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">执行动作的人或物</span>
+                                    <span class="lang-en">Person or thing performing an action</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-paw icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>xiāo fèi zhě</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">直接或间接以生产者为食的生物</span>
+                                    <span class="lang-en">Organisms that feed directly or indirectly on producers</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">分类：</span>
+                                    <span class="lang-en">Categories:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">初级消费者、次级消费者、三级消费者</span>
+                                    <span class="lang-en">Primary consumers, secondary consumers, tertiary consumers</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">草食动物、肉食动物、杂食动物</span>
+                                    <span class="lang-en">Herbivores, carnivores, omnivores</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分解者 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">分解者</span>
+                            <span class="lang-en">Decomposers</span>
+                        </h3>
+                        <p class="card-subtitle">Saprotrophs</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">分</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">八 + 刀：分开、分解</span>
+                                    <span class="lang-en">八 (eight) + 刀 (knife): Separate, decompose</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">解</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">角 + 刀 + 牛：解开、分解</span>
+                                    <span class="lang-en">角 (horn) + 刀 (knife) + 牛 (cow): Untie, decompose</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">者</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">执行动作的人或物</span>
+                                    <span class="lang-en">Person or thing performing an action</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-recycle icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>fēn jiě zhě</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">将有机物分解为无机物的生物</span>
+                                    <span class="lang-en">Organisms that break down organic matter into inorganic substances</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">示例：</span>
+                                    <span class="lang-en">Examples:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">细菌、真菌、蚯蚓</span>
+                                    <span class="lang-en">Bacteria, fungi, earthworms</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">功能：</span>
+                                    <span class="lang-en">Function:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">物质循环的关键环节，使养分回归环境</span>
+                                    <span class="lang-en">Key link in material cycling, returns nutrients to the environment</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 食物网 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <span class="lang-zh">食物网</span>
+                            <span class="lang-en">Food Web</span>
+                        </h3>
+                        <p class="card-subtitle">Food Web</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="character-breakdown">
+                            <div class="char-item">
+                                <span class="char">食</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">人 + 良：食物、吃</span>
+                                    <span class="lang-en">人 (person) + 良 (good): Food, eat</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">物</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">牛 + 勿：万物</span>
+                                    <span class="lang-en">牛 (cow) + 勿 (not): All things</span>
+                                </span>
+                            </div>
+                            <div class="char-item">
+                                <span class="char">网</span>
+                                <span class="meaning">
+                                    <span class="lang-zh">冂 + 乂乂：网状结构</span>
+                                    <span class="lang-en">冂 + 乂乂: Net-like structure</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="visual-aid">
+                            <i class="fas fa-network-wired icon-placeholder"></i>
+                        </div>
+                        <div class="term-details">
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">拼音：</span>
+                                    <span class="lang-en">Pinyin:</span>
+                                </span>
+                                <span>shí wù wǎng</span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">定义：</span>
+                                    <span class="lang-en">Definition:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">生态系统中相互连接的食物链构成的复杂网络</span>
+                                    <span class="lang-en">Complex network of interconnected food chains in an ecosystem</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">特点：</span>
+                                    <span class="lang-en">Characteristics:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">体现能量流动和物质循环的复杂关系</span>
+                                    <span class="lang-en">Reflects complex relationships of energy flow and material cycling</span>
+                                </span>
+                            </div>
+                            <div class="term-row">
+                                <span class="term-label">
+                                    <span class="lang-zh">重要性：</span>
+                                    <span class="lang-en">Importance:</span>
+                                </span>
+                                <span>
+                                    <span class="lang-zh">增加生态系统的稳定性和恢复力</span>
+                                    <span class="lang-en">Increases ecosystem stability and resilience</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i>
+                <span class="lang-zh">要素相互作用</span>
+                <span class="lang-en">Component Interactions</span>
+            </h2>
+            <div class="interactive-section">
+                <p>
+                    <span class="lang-zh">栖息地中各种要素通过复杂的相互作用维持生态平衡：</span>
+                    <span class="lang-en">Various components in habitats maintain ecological balance through complex interactions:</span>
+                </p>
+                
+                <div style="margin: 1.5rem 0;">
+                    <div style="background-color: #f9fdfc; border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--primary);">
+                        <h4>
+                            <span class="lang-zh">能量流动</span>
+                            <span class="lang-en">Energy Flow</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">太阳能 → 生产者 → 消费者 → 分解者 → 环境</span>
+                            <span class="lang-en">Solar energy → Producers → Consumers → Decomposers → Environment</span>
+                        </p>
+                    </div>
+                    
+                    <div style="background-color: #f9fdfc; border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--secondary); margin-top: 1rem;">
+                        <h4>
+                            <span class="lang-zh">物质循环</span>
+                            <span class="lang-en">Material Cycling</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">碳循环、氮循环、水循环、磷循环等</span>
+                            <span class="lang-en">Carbon cycle, nitrogen cycle, water cycle, phosphorus cycle, etc.</span>
+                        </p>
+                    </div>
+                    
+                    <div style="background-color: #f9fdfc; border-radius: 8px; padding: 1.5rem; border-left: 4px solid var(--accent1); margin-top: 1rem;">
+                        <h4>
+                            <span class="lang-zh">信息传递</span>
+                            <span class="lang-en">Information Transmission</span>
+                        </h4>
+                        <p>
+                            <span class="lang-zh">物理信息（光、声、温度）、化学信息（信息素）、行为信息</span>
+                            <span class="lang-en">Physical information (light, sound, temperature), chemical information (pheromones), behavioral information</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 1.5rem;">
+                    <span class="lang-zh">这些相互作用使栖息地成为一个动态的、自我调节的系统，能够应对外部变化并维持内部稳定。</span>
+                    <span class="lang-en">These interactions make habitats dynamic, self-regulating systems capable of responding to external changes and maintaining internal stability.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>
+                <span class="lang-zh">栖息地科学双语学习系统 © 2023</span>
+                <span class="lang-en">Habitat Science Bilingual Learning System © 2023</span>
+            </p>
+            <p>
+                <span class="lang-zh">设计理念：融合科学教育、语言学习与文化理解</span>
+                <span class="lang-en">Design Philosophy: Integrating science education, language learning, and cultural understanding</span>
+            </p>
+            <p>
+                <span class="lang-zh">适合各年龄段学习者 | 联系我们：learning@habitat-science.org</span>
+                <span class="lang-en">Suitable for learners of all ages | Contact us: learning@habitat-science.org</span>
+            </p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                <i class="fas fa-leaf"></i> 
+                <span class="lang-zh">保护栖息地，就是保护我们共同的家园</span>
+                <span class="lang-en">Protecting habitats means protecting our shared home</span>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // 语言切换功能
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 移除所有语言按钮的active类
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                // 激活当前按钮
+                btn.classList.add('active');
+                
+                // 获取选中的语言模式
+                const lang = btn.getAttribute('data-lang');
+                
+                // 更新body的类以控制显示
+                document.body.className = '';
+                document.body.classList.add(`lang-${lang}`);
+                
+                // 更新搜索框占位符
+                const searchInput = document.getElementById('searchInput');
+                if (lang === 'zh') {
+                    searchInput.placeholder = '搜索栖息地相关词汇...';
+                } else if (lang === 'en') {
+                    searchInput.placeholder = 'Search for habitat-related terms...';
+                } else {
+                    searchInput.placeholder = '搜索栖息地相关词汇 (中/英文均可)...';
+                }
+            });
+        });
+        
+        // 标签页切换功能
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有标签的active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // 隐藏所有内容
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                // 激活当前标签
+                tab.classList.add('active');
+                // 显示对应内容
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // 学习级别切换
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const level = btn.getAttribute('data-level');
+                // 这里可以添加根据级别筛选内容的逻辑
+                alert(`已切换到${btn.textContent}模式，内容将相应调整`);
+            });
+        });
+        
+        // 栖息地类型筛选
+        document.querySelectorAll('.habitat-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.habitat-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const type = btn.getAttribute('data-type');
+                const cards = document.querySelectorAll('.habitat-card');
+                
+                cards.forEach(card => {
+                    if (type === 'all' || card.getAttribute('data-type') === type) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    card.style.animation = 'pulse 0.5s';
+                    setTimeout(() => {
+                        card.style.animation = '';
+                    }, 500);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // 页面加载后默认显示概览
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('overview').classList.add('active');
+        });
+    </script>
+</body>
+</html>
